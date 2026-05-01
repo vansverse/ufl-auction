@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>UFL 2026 - Auction</title>
+      <link rel="stylesheet"
+         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+      <style>
+         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik+Mono+One&display=swap');
+         @import url('https://fonts.googleapis.com/css2?family=Edu+QLD+Beginner:wght@400..700&family=Pacifico&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap');
+
+         :root {
+            --bg-gradient: linear-gradient(135deg, #1a0a2e 0%, #16213e 40%, #0f3460 70%, #1a1a2e 100%);
+            --card-bg: rgba(22, 33, 62, 0.8);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-1: #f59e0b;
+            --accent-2: #3b82f6;
+            --accent-3: #10b981;
+            --accent-glow: rgba(245, 158, 11, 0.3);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+         }
+
+         * { box-sizing: border-box; margin: 0; padding: 0; }
+
+         html { height: 100%; }
+         body {
+            font-family: 'Winky Rough', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            margin: 0;
+            padding: 20px 24px;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+         }
+
+         body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+               radial-gradient(ellipse at 15% 20%, rgba(245, 158, 11, 0.12) 0%, transparent 45%),
+               radial-gradient(ellipse at 85% 15%, rgba(59, 130, 246, 0.1) 0%, transparent 45%),
+               radial-gradient(ellipse at 50% 90%, rgba(139, 92, 246, 0.08) 0%, transparent 45%),
+               radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.06) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+         }
+
+         .header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 28px;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            padding: 20px 36px;
+            background: linear-gradient(135deg, rgba(26, 10, 46, 0.8), rgba(15, 52, 96, 0.6));
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 0 40px rgba(245, 158, 11, 0.06);
+         }
+
+         .logo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-1);
+            box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(245, 158, 11, 0.1);
+            flex-shrink: 0;
+         }
+
+         .heading-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+         }
+
+         .main-heading {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 30px;
+            text-align: center;
+            color: var(--accent-1);
+            animation: glow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            line-height: 1.4;
+         }
+
+         .sub-heading {
+            font-family: 'Winky Rough', sans-serif;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+         }
+
+         @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+            to   { text-shadow: 0 0 25px rgba(245, 158, 11, 0.7), 0 0 50px rgba(245, 158, 11, 0.3); }
+         }
+
+         @keyframes slideIn {
+            from { transform: translateY(30px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+         }
+
+         #container {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 20px;
+            align-items: flex-start;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+         }
+
+         .team {
+            flex: 1;
+            min-width: 0;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 22px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideIn 0.8s ease-in-out;
+         }
+
+         .team:hover { transform: translateY(-5px); }
+
+         .team {
+            border-top: 3px solid var(--accent-1);
+            border-left: 1px solid rgba(245, 158, 11, 0.1);
+            border-right: 1px solid rgba(245, 158, 11, 0.1);
+            box-shadow: 0 4px 24px rgba(245, 158, 11, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            background: linear-gradient(180deg, rgba(22, 33, 62, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+         }
+         .team:hover { box-shadow: 0 10px 40px rgba(245, 158, 11, 0.2), 0 0 60px rgba(245, 158, 11, 0.06); }
+         .team .team-header { background: linear-gradient(135deg, #f59e0b, #e67e22, #d97706); }
+         .team .team-content { border-color: rgba(245, 158, 11, 0.25); }
+         .team .team-table th { background: linear-gradient(135deg, var(--accent-1), #d97706); }
+         .team .team-table td, .team .team-table th { border-color: rgba(245, 158, 11, 0.2); }
+
+         .captain-avatar {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: -60px;
+            margin-bottom: 12px;
+         }
+
+         .captain-avatar img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-1);
+            box-shadow: 0 0 20px var(--accent-glow), 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+         }
+
+         .team:hover .captain-avatar img {
+            transform: scale(1.06);
+         }
+
+         .team-header {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+         }
+
+         .team-points {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-bottom: 14px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+         }
+
+         .team-points .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+         }
+
+         .team-points .stat-row:last-child {
+            border-bottom: none;
+         }
+
+         .team-points .stat-row .stat-label {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+         }
+
+         .team-points .stat-row .stat-value {
+            font-weight: 900;
+            font-size: 28px;
+            color: var(--accent-1);
+            text-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+            letter-spacing: 1px;
+         }
+
+         .team-content {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(245, 158, 11, 0.2);
+            border-radius: 14px;
+            padding: 18px;
+            min-height: 70px;
+            text-align: center;
+            color: var(--text-secondary);
+            margin: 18px 0;
+            transition: border-color 0.2s, background 0.2s;
+            font-size: 15px;
+         }
+
+         .team-content.drag-over {
+            border-color: var(--accent-1);
+            background: rgba(245, 158, 11, 0.05);
+         }
+
+         .list-title, .team h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            letter-spacing: 0.3px;
+         }
+
+         .team-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            font-size: 13px;
+         }
+
+         .team-table th,
+         .team-table td {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 10px;
+            text-align: left;
+         }
+
+         .team-table th {
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+         }
+
+         .team-table td {
+            background: rgba(255, 255, 255, 0.02);
+         }
+
+         .team-table tr { font-size: 16px; }
+
+         .player-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin: 6px 0;
+            cursor: grab;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-size: 20px;
+         }
+
+         .player-card:hover {
+            background: rgba(30, 41, 59, 1);
+            transform: translateX(6px);
+            box-shadow: 0 2px 12px var(--accent-glow);
+            border-color: rgba(245, 158, 11, 0.3);
+         }
+
+         .player-card.dragging {
+            opacity: 0.4;
+            border-style: dotted;
+            transform: rotate(2deg) scale(0.95);
+         }
+
+         .player-photo {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+         }
+
+         #players {
+            min-width: 320px;
+            max-width: 360px;
+            position: relative;
+            z-index: 1;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 22px;
+            max-height: calc(100vh - 180px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(245, 158, 11, 0.3) transparent;
+         }
+
+         #players::-webkit-scrollbar { width: 6px; }
+         #players::-webkit-scrollbar-track { background: transparent; }
+         #players::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.3); border-radius: 3px; }
+
+         #players h2 {
+            font-size: 20px;
+            margin-bottom: 14px;
+            color: var(--accent-1);
+            position: sticky;
+            top: 0;
+            background: var(--card-bg);
+            padding-bottom: 8px;
+            z-index: 2;
+         }
+
+         #clearData button {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+         }
+
+         #clearData button:hover { box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); transform: translateY(-1px); }
+
+         #randomPlayerName {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: var(--accent-1);
+            font-size: 16px;
+         }
+
+         .delete-button {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 50%;
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            width: 28px;
+            height: 28px;
+         }
+
+         .delete-button:hover {
+            background: #ef4444;
+            color: #fff;
+         }
+
+         #clearData { cursor: pointer; }
+
+         #current-player {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.2), rgba(59, 130, 246, 0.2));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
+            animation: glowPulse 2s ease-in-out infinite;
+            color: #fff;
+            font-family: 'Rubik Mono One', sans-serif;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(8px);
+         }
+
+         #current-player:hover { transform: scale(1.02); }
+
+         #current-player h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--accent-1);
+         }
+
+         #current-player img {
+            height: 380px;
+            width: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 3px solid rgba(245, 158, 11, 0.5);
+            margin-bottom: 15px;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+         }
+
+         #current-player span {
+            font-size: 18px;
+            font-style: italic;
+            background: rgba(245, 158, 11, 0.15);
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #fff;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+         }
+
+         @keyframes glowPulse {
+            0%   { box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); }
+            50%  { box-shadow: 0 0 30px rgba(245, 158, 11, 0.25); }
+            100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); }
+         }
+
+         #photoModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+         }
+
+         #photoModal img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.3);
+            min-height: 50%;
+         }
+
+         #photoModal h1 {
+            background: rgba(15, 23, 42, 0.8);
+            padding: 12px 40px;
+            text-align: center;
+            font-size: 48px;
+            color: white;
+            border-radius: 12px;
+            margin-top: 16px;
+         }
+
+         .team-full {
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%) !important;
+            border-color: rgba(16, 185, 129, 0.4) !important;
+            border-top-color: #10b981 !important;
+            box-shadow: 0 4px 30px rgba(16, 185, 129, 0.2), 0 0 60px rgba(16, 185, 129, 0.08) !important;
+         }
+
+         .team-full .team-header {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+         }
+
+         .team-full .team-points {
+            border-color: rgba(16, 185, 129, 0.2);
+         }
+
+         .team-full .team-points .stat-value {
+            color: #10b981 !important;
+            text-shadow: 0 0 8px rgba(16, 185, 129, 0.3) !important;
+         }
+
+         .team-full .captain-avatar img {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+         }
+
+         /* Bid Modal */
+         .bid-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+         }
+         .bid-overlay.active { display: flex; }
+
+         .bid-modal {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 32px 36px;
+            width: 380px;
+            max-width: 92vw;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(245, 158, 11, 0.1);
+            animation: modalIn 0.25s ease-out;
+            text-align: center;
+         }
+
+         @keyframes modalIn {
+            from { transform: scale(0.9) translateY(20px); opacity: 0; }
+            to   { transform: scale(1) translateY(0); opacity: 1; }
+         }
+
+         .bid-modal h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--accent-1);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+         }
+
+         .bid-modal .bid-player-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+         }
+
+         .bid-modal .bid-team-name {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+         }
+
+         .bid-input-wrap {
+            position: relative;
+            margin-bottom: 8px;
+         }
+
+         .bid-input-wrap input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 28px;
+            font-family: 'Winky Rough', sans-serif;
+            font-weight: 700;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: textfield;
+            -moz-appearance: textfield;
+         }
+
+         .bid-input-wrap input::-webkit-outer-spin-button,
+         .bid-input-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+         .bid-input-wrap input:focus {
+            border-color: var(--accent-1);
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+         }
+
+         .bid-input-wrap input.bid-error {
+            border-color: #ef4444;
+            box-shadow: 0 0 16px rgba(239, 68, 68, 0.2);
+            animation: shake 0.4s ease;
+         }
+
+         @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+         }
+
+         .bid-error-msg {
+            font-size: 13px;
+            color: #ef4444;
+            height: 20px;
+            margin-bottom: 12px;
+         }
+
+         .bid-quick-amounts {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+         }
+
+         .bid-quick-amounts button {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            color: var(--accent-1);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Winky Rough', sans-serif;
+         }
+
+         .bid-quick-amounts button:hover {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--accent-1);
+            transform: translateY(-1px);
+         }
+
+         .bid-actions {
+            display: flex;
+            gap: 10px;
+         }
+
+         .bid-actions button {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Winky Rough', sans-serif;
+            letter-spacing: 0.5px;
+         }
+
+         .bid-actions .bid-confirm {
+            background: linear-gradient(135deg, var(--accent-1), #d97706);
+            color: #000;
+         }
+
+         .bid-actions .bid-confirm:hover {
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            transform: translateY(-1px);
+         }
+
+         .bid-actions .bid-cancel {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+         }
+
+         .bid-actions .bid-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+         }
+
+         @media (max-width: 1400px) {
+            #container { flex-wrap: wrap; justify-content: center; }
+            .team { flex: 1 1 calc(50% - 20px); min-width: 300px; max-width: 500px; }
+            #players { min-width: 300px; max-width: 100%; max-height: none; flex: 1 1 100%; }
+         }
+
+         @media (max-width: 768px) {
+            body { padding: 12px; }
+            .header { flex-direction: column; gap: 12px; text-align: center; padding: 14px; }
+            .logo { height: 70px; width: 70px; }
+            .main-heading { font-size: 16px; }
+            .sub-heading { font-size: 14px; letter-spacing: 2px; }
+            .team { flex: 1 1 100%; max-width: 100%; }
+            .team-header { font-size: 12px; padding: 8px; }
+            .team-points span { font-size: 13px; }
+            .team-table th, .team-table td { font-size: 11px; padding: 5px; }
+            .player-card { font-size: 15px; }
+            .captain-avatar img { width: 80px; height: 80px; }
+         }
+
+         @media (max-width: 480px) {
+            .main-heading { font-size: 12px; }
+            .sub-heading { font-size: 11px; letter-spacing: 1px; }
+            .team-table { overflow-x: auto; display: block; }
+         }
+      </style>
+   </head>
+   <body>
+      <div id="photoModal">
+         <img id="modalImage" src="" />
+         <div><h1></h1></div>
+      </div>
+
+      <div class="bid-overlay" id="bidOverlay">
+         <div class="bid-modal">
+            <h2>PLACE YOUR BID</h2>
+            <div class="bid-player-name" id="bidPlayerName"></div>
+            <div class="bid-team-name" id="bidTeamLabel"></div>
+            <div class="bid-input-wrap">
+               <input type="number" id="bidInput" min="100" step="100" placeholder="Enter points" autocomplete="off" />
+            </div>
+            <div class="bid-error-msg" id="bidError"></div>
+            <div class="bid-quick-amounts">
+               <button onclick="setBid(100)">100</button>
+               <button onclick="setBid(200)">200</button>
+               <button onclick="setBid(500)">500</button>
+               <button onclick="setBid(1000)">1000</button>
+               <button onclick="setBid(1500)">1500</button>
+               <button onclick="setBid(2000)">2000</button>
+            </div>
+            <div class="bid-actions">
+               <button class="bid-cancel" onclick="closeBidModal()">Cancel</button>
+               <button class="bid-confirm" onclick="confirmBid()">Confirm Bid</button>
+            </div>
+         </div>
+      </div>
+
+      <div class="header">
+         <img src="UFL.jpeg" class="logo" />
+         <div class="heading-wrap">
+            <h1 class="main-heading">Ultimate Frisbee League Auction</h1>
+            <p class="sub-heading">North Park - June - 2026</p>
+         </div>
+      </div>
+
+      <div id="container">
+         <div class="team" id="teamAnkit">
+            <div class="captain-avatar">
+               <img src="./UFLPics/Ankit.jpg" alt="Ankit" />
+            </div>
+            <h2 class="team-header">Ankit</h2>
+            <div class="team-points">
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsAnkit">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersAnkit">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidAnkit">6400</span></div>
+            </div>
+            <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <p>Drag players here</p>
+            </div>
+            <h3>Team Roster</h3>
+            <table class="team-table">
+               <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
+               <tbody id="teamAnkitRoster"></tbody>
+            </table>
+         </div>
+
+         <div class="team" id="teamDeepak">
+            <div class="captain-avatar">
+               <img src="./UFLPics/Deepak.jpg" alt="Deepak" />
+            </div>
+            <h2 class="team-header">Deepak</h2>
+            <div class="team-points">
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsDeepak">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersDeepak">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidDeepak">6400</span></div>
+            </div>
+            <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <p>Drag players here</p>
+            </div>
+            <h3>Team Roster</h3>
+            <table class="team-table">
+               <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
+               <tbody id="teamDeepakRoster"></tbody>
+            </table>
+         </div>
+
+         <div class="team" id="teamSuhas">
+            <div class="captain-avatar">
+               <img src="./UFLPics/Suhas.JPG" alt="Suhas" />
+            </div>
+            <h2 class="team-header">Suhas</h2>
+            <div class="team-points">
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsSuhas">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersSuhas">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidSuhas">6400</span></div>
+            </div>
+            <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <p>Drag players here</p>
+            </div>
+            <h3>Team Roster</h3>
+            <table class="team-table">
+               <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
+               <tbody id="teamSuhasRoster"></tbody>
+            </table>
+         </div>
+
+         <div class="team" id="teamVenkatesh">
+            <div class="captain-avatar">
+               <img src="./UFLPics/Venkatesh.jpg" alt="Venkatesh" />
+            </div>
+            <h2 class="team-header">Venkatesh</h2>
+            <div class="team-points">
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsVenkatesh">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersVenkatesh">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidVenkatesh">6400</span></div>
+            </div>
+            <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <p>Drag players here</p>
+            </div>
+            <h3>Team Roster</h3>
+            <table class="team-table">
+               <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
+               <tbody id="teamVenkateshRoster"></tbody>
+            </table>
+         </div>
+
+         <div id="players">
+            <div id="current-player" style="display: none;">
+               <h2>Current Player</h2>
+               <img src="" alt="Current Player Photo" />
+            </div>
+            <h2>Available Players</h2>
+            <div id="player-photo-display"></div>
+            <div id="playerList"></div>
+            <div id="clearData">
+               <button>Reset Data</button>
+            </div>
+         </div>
+      </div>
+
+      <script>
+         var defaultTeams = {
+             teamAnkit: { name: 'Ankit', points: 7000, players: [] },
+             teamDeepak: { name: 'Deepak', points: 7000, players: [] },
+             teamSuhas: { name: 'Suhas', points: 7000, players: [] },
+             teamVenkatesh: { name: 'Venkatesh', points: 7000, players: [] },
+         };
+
+         var picsBase = './UFLPics';
+
+         var initialPlayers = [
+             { id: 'player1', name: 'Anupam', photo: 'Anupam.JPG' },
+             { id: 'player2', name: 'Hari', photo: 'Hari.jpg' },
+             { id: 'player3', name: 'Apurv', photo: 'Apurv.jpg' },
+             { id: 'player4', name: 'Anish', photo: '' },
+             { id: 'player5', name: 'Tapan', photo: 'Tapan.JPG' },
+             { id: 'player6', name: 'Mayank', photo: 'Mayank.jpg' },
+             { id: 'player7', name: 'Saurabh', photo: 'Saurabh.jpg' },
+             { id: 'player8', name: 'Mani', photo: 'Mani.jpg' },
+             { id: 'player9', name: 'Balaji', photo: '' },
+             { id: 'player10', name: 'Ravin', photo: 'Ravin.jpg' },
+             { id: 'player11', name: 'Rathin', photo: '' },
+             { id: 'player12', name: 'Prathamesh', photo: 'Prathamesh.jpg' },
+             { id: 'player13', name: 'Sravan', photo: 'Sravan.jpg' },
+             { id: 'player14', name: 'Prakshal', photo: 'Prakshal.jpg' },
+             { id: 'player15', name: 'Vaanya', photo: 'Vaanya.PNG' },
+             { id: 'player16', name: 'Mohit', photo: 'Mohit.jpeg' },
+             { id: 'player17', name: 'Daksha', photo: 'Daksha.jpeg' },
+             { id: 'player18', name: 'Sumit', photo: 'Sumit.jpg' },
+             { id: 'player19', name: 'Nihar', photo: 'Nihar.jpg' },
+             { id: 'player20', name: 'Sanjay', photo: '' },
+             { id: 'player21', name: 'Nitin', photo: 'Nitin.JPG' },
+             { id: 'player22', name: 'Chan', photo: '' },
+             { id: 'player23', name: 'Kalyani', photo: 'Kalyani.jpg' },
+             { id: 'player24', name: 'Prajakta', photo: '' },
+             { id: 'player25', name: 'Riddhi', photo: '' },
+             { id: 'player26', name: 'Karan', photo: '' },
+             { id: 'player27', name: 'Shiva', photo: 'Shiva.jpg' },
+             { id: 'player28', name: 'GF', photo: '' },
+         ];
+
+         function getPlayerById(id) {
+             return initialPlayers.find(function(p) { return p.id === id; });
+         }
+
+         function saveAvailableIds() {
+             var ids = availablePlayers.map(function(p) { return p.id; });
+             localStorage.setItem('availablePlayerIds', JSON.stringify(ids));
+         }
+
+         function loadAvailablePlayers() {
+             var stored = localStorage.getItem('availablePlayerIds');
+             if (!stored) return initialPlayers.slice();
+             var ids = JSON.parse(stored);
+             return ids.map(function(id) { return getPlayerById(id); }).filter(Boolean);
+         }
+
+         var storedVersion = localStorage.getItem('playerVersion');
+         var currentVersion = '2026-v4';
+         if (storedVersion !== currentVersion) {
+             localStorage.clear();
+             localStorage.setItem('playerVersion', currentVersion);
+         }
+
+         var teams = JSON.parse(localStorage.getItem('teams')) || defaultTeams;
+         var availablePlayers = loadAvailablePlayers();
+
+         document.addEventListener('click', function(e) {
+             if (e.target.classList.contains('player-photo') && e.target.src) {
+                 var container = document.querySelector('#current-player');
+                 var frame = container.querySelector('img');
+                 if (frame) {
+                     frame.src = e.target.src;
+                 } else {
+                     var newImg = document.createElement('img');
+                     newImg.src = e.target.src;
+                     container.appendChild(newImg);
+                 }
+                 container.style.display = 'block';
+             }
+         });
+
+         function allowDrop(ev) { ev.preventDefault(); }
+
+         function dragEnter(ev) {
+             ev.preventDefault();
+             var tc = ev.target.closest('.team-content');
+             if (tc) tc.classList.add('drag-over');
+         }
+
+         function dragLeave(ev) {
+             var tc = ev.target.closest('.team-content');
+             if (tc) tc.classList.remove('drag-over');
+         }
+
+         function drag(ev) {
+             ev.dataTransfer.setData('text/plain', ev.target.id);
+             ev.target.classList.add('dragging');
+         }
+
+         var pendingDrop = null;
+
+         function openBidModal(playerName, teamId, playerId, playerElement) {
+             var teamName = teams[teamId].name;
+             document.getElementById('bidPlayerName').textContent = playerName;
+             document.getElementById('bidTeamLabel').textContent = 'Joining Team ' + teamName + '  \u2022  ' + teams[teamId].points + ' pts available';
+             document.getElementById('bidInput').value = '';
+             document.getElementById('bidError').textContent = '';
+             document.getElementById('bidInput').classList.remove('bid-error');
+             pendingDrop = { playerName: playerName, teamId: teamId, playerId: playerId, playerElement: playerElement };
+             document.getElementById('bidOverlay').classList.add('active');
+             setTimeout(function() { document.getElementById('bidInput').focus(); }, 100);
+         }
+
+         function closeBidModal() {
+             document.getElementById('bidOverlay').classList.remove('active');
+             if (pendingDrop && pendingDrop.playerElement) {
+                 pendingDrop.playerElement.classList.remove('dragging');
+             }
+             pendingDrop = null;
+         }
+
+         function setBid(val) {
+             document.getElementById('bidInput').value = val;
+             document.getElementById('bidInput').classList.remove('bid-error');
+             document.getElementById('bidError').textContent = '';
+         }
+
+         function confirmBid() {
+             if (!pendingDrop) return;
+             var input = document.getElementById('bidInput');
+             var points = parseInt(input.value);
+
+             if (isNaN(points) || points < 100) {
+                 input.classList.add('bid-error');
+                 document.getElementById('bidError').textContent = 'Minimum bid is 100 points';
+                 return;
+             }
+
+             var teamId = pendingDrop.teamId;
+             var playerId = pendingDrop.playerId;
+             var playerName = pendingDrop.playerName;
+             var playerElement = pendingDrop.playerElement;
+
+             if (teams[teamId].points < points) {
+                 input.classList.add('bid-error');
+                 document.getElementById('bidError').textContent = 'Not enough points! ' + teams[teamId].points + ' available';
+                 return;
+             }
+
+             var teamKey = teamId.charAt(4).toUpperCase() + teamId.slice(5);
+             var pointsElement = document.getElementById('points' + teamKey);
+
+             teams[teamId].points -= points;
+             pointsElement.textContent = teams[teamId].points;
+
+             var tableBody = document.getElementById(teamId + 'Roster');
+             var row = document.createElement('tr');
+             row.innerHTML =
+                 '<td><div style="display:flex;align-items:center;">' + playerName + '</div></td>' +
+                 '<td><div style="display:flex;align-items:center;">' + points + '</div></td>' +
+                 '<td><div style="display:flex;align-items:center;"><button class="delete-button" onclick="removePlayerFromTeam(\'' + playerId + '\', \'' + teamId + '\')"><i class="fas fa-trash-alt"></i></button></div></td>';
+             tableBody.appendChild(row);
+
+             teams[teamId].players.push({ id: playerId, name: playerName, points: points });
+
+             availablePlayers = availablePlayers.filter(function(player) { return player.id !== playerId; });
+
+             localStorage.setItem('teams', JSON.stringify(teams));
+             saveAvailableIds();
+
+             var teamName = teams[teamId].name;
+             var storedTeams = JSON.parse(localStorage.getItem('teams'));
+             var storedTeam = storedTeams['team' + teamName];
+
+             document.getElementById('players' + teamName).textContent =
+                 7 - storedTeam.players.length;
+
+             document.getElementById('bid' + teamName).textContent =
+                 Math.max(0, storedTeam.points - (7 - storedTeam.players.length - 1) * 100);
+
+             if (storedTeam.players.length === 7) {
+                 document.getElementById('team' + storedTeam.name).classList.add('team-full');
+             }
+
+             updatePlayerList();
+             if (playerElement) playerElement.classList.remove('dragging');
+
+             closeBidModal();
+         }
+
+         document.getElementById('bidInput').addEventListener('keydown', function(e) {
+             if (e.key === 'Enter') confirmBid();
+             if (e.key === 'Escape') closeBidModal();
+         });
+
+         document.getElementById('bidOverlay').addEventListener('click', function(e) {
+             if (e.target === this) closeBidModal();
+         });
+
+         function drop(ev) {
+             ev.preventDefault();
+             var tc = ev.target.closest('.team-content');
+             if (tc) tc.classList.remove('drag-over');
+             var playerId = ev.dataTransfer.getData('text/plain');
+             var playerElement = document.getElementById(playerId);
+             var teamContent = ev.target.closest('.team-content');
+             if (teamContent && !teamContent.contains(playerElement)) {
+                 var teamId = teamContent.parentElement.id;
+                 var playerName = playerElement.textContent.trim();
+                 openBidModal(playerName, teamId, playerId, playerElement);
+             }
+         }
+
+         function updatePlayerList() {
+             var playerList = document.getElementById('playerList');
+             playerList.innerHTML = '';
+             availablePlayers.forEach(function(player) {
+                 var playerCard = document.createElement('div');
+                 playerCard.className = 'player-card';
+                 playerCard.id = player.id;
+                 playerCard.draggable = true;
+                 var photoHtml = player.photo
+                     ? '<img src="' + picsBase + '/' + player.photo + '" alt="' + player.name + '" class="player-photo" />'
+                     : '<div class="player-photo" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,158,11,0.2);color:var(--accent-1);font-weight:700;font-size:14px;">' + player.name.charAt(0) + '</div>';
+                 playerCard.innerHTML = photoHtml + '<span>' + player.name + '</span>';
+                 playerCard.ondragstart = drag;
+                 playerCard.ondragend = function() { playerCard.classList.remove('dragging'); };
+                 playerList.appendChild(playerCard);
+             });
+         }
+
+         function removePlayerFromTeam(playerId, teamId) {
+             var team = teams[teamId];
+             var playerIndex = team.players.findIndex(function(player) { return player.id === playerId; });
+             if (playerIndex === -1) {
+                 alert('Player not found in the team.');
+                 return;
+             }
+
+             var player = team.players[playerIndex];
+             var points = player.points;
+             var playerName = player.name;
+
+             team.players.splice(playerIndex, 1);
+
+             var original = getPlayerById(playerId);
+             availablePlayers.push(original || { id: playerId, name: playerName, photo: '' });
+
+             team.points += points;
+             document.getElementById(
+                 'points' + teamId.charAt(4).toUpperCase() + teamId.slice(5)
+             ).textContent = team.points;
+
+             var tableBody = document.getElementById(teamId + 'Roster');
+             var rows = Array.from(tableBody.rows);
+             rows.forEach(function(row) {
+                 if (row.cells[0].textContent.trim() === playerName) {
+                     tableBody.removeChild(row);
+                 }
+             });
+
+             localStorage.setItem('teams', JSON.stringify(teams));
+             saveAvailableIds();
+
+             var teamName = teams[teamId].name;
+             var storedTeams = JSON.parse(localStorage.getItem('teams'));
+             var storedTeam = storedTeams['team' + teamName];
+
+             document.getElementById('players' + teamName).textContent =
+                 7 - storedTeam.players.length;
+
+             document.getElementById('bid' + teamName).textContent =
+                 Math.max(0, storedTeam.points - (7 - storedTeam.players.length - 1) * 100);
+
+             document.getElementById('team' + storedTeam.name).classList.remove('team-full');
+
+             updatePlayerList();
+         }
+
+         function loadTeams() {
+             for (var teamId in teams) {
+                 var team = teams[teamId];
+                 var teamKey = teamId.charAt(4).toUpperCase() + teamId.slice(5);
+                 var pointsElement = document.getElementById('points' + teamKey);
+                 var playersRemaining = document.getElementById('players' + teamKey);
+                 var maxBid = document.getElementById('bid' + teamKey);
+
+                 pointsElement.textContent = team.points;
+                 playersRemaining.textContent = 7 - team.players.length;
+                 maxBid.textContent = Math.max(0,
+                     parseInt(pointsElement.textContent) -
+                     (7 - team.players.length - 1) * 100);
+
+                 var tableBody = document.getElementById(teamId + 'Roster');
+                 tableBody.innerHTML = '';
+                 team.players.forEach(function(player) {
+                     var row = document.createElement('tr');
+                     row.innerHTML =
+                         '<td><div style="display:flex;align-items:center;">' + player.name + '</div></td>' +
+                         '<td><div style="display:flex;align-items:center;">' + player.points + '</div></td>' +
+                         '<td><div style="display:flex;align-items:center;"><button class="delete-button" onclick="removePlayerFromTeam(\'' + player.id + '\', \'' + teamId + '\')"><i class="fas fa-trash-alt"></i></button></div></td>';
+                     tableBody.appendChild(row);
+                 });
+
+                 if (team.players.length === 7) {
+                     document.getElementById(teamId).classList.add('team-full');
+                 }
+             }
+         }
+
+         document.getElementById('clearData').addEventListener('click', function() {
+             var confirmClear = confirm(
+                 'Are you sure you want to reset everything? This cannot be undone.'
+             );
+             if (confirmClear) {
+                 window.localStorage.clear();
+                 window.location.reload();
+             }
+         });
+
+         window.onload = function() {
+             updatePlayerList();
+             loadTeams();
+         };
+      </script>
+   </body>
+</html>
