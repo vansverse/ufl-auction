@@ -301,6 +301,22 @@
             box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
          }
 
+         .current-no-photo {
+            height: 380px;
+            width: 250px;
+            border-radius: 15px;
+            border: 3px solid rgba(245, 158, 11, 0.5);
+            margin-bottom: 15px;
+            box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(59, 130, 246, 0.2));
+            font-family: 'Press Start 2P', cursive;
+            font-size: 80px;
+            color: #fff;
+         }
+
          .player-card.dragging {
             opacity: 0.4;
             border-style: dotted;
@@ -1131,7 +1147,9 @@
              var container = document.getElementById('current-player');
              var img = document.getElementById('currentPlayerImg');
              var nameEl = document.getElementById('currentPlayerName');
-             var skipBtn = document.getElementById('skipBtn');
+
+             var existingPlaceholder = container.querySelector('.current-no-photo');
+             if (existingPlaceholder) existingPlaceholder.remove();
 
              if (!player) {
                  container.style.display = 'none';
@@ -1147,6 +1165,10 @@
              } else {
                  img.src = '';
                  img.style.display = 'none';
+                 var placeholder = document.createElement('div');
+                 placeholder.className = 'current-no-photo';
+                 placeholder.textContent = player.name.charAt(0);
+                 container.insertBefore(placeholder, nameEl);
              }
          }
 
@@ -1154,7 +1176,7 @@
              if (availablePlayers.length <= 1) return;
              currentPlayerIndex = (currentPlayerIndex + 1) % availablePlayers.length;
              saveAvailableIds();
-             updateCurrentPlayerDisplay();
+             updatePlayerList();
          }
 
          function advanceToNextPlayer() {
@@ -1162,7 +1184,7 @@
                  currentPlayerIndex = 0;
              }
              saveAvailableIds();
-             updateCurrentPlayerDisplay();
+             updatePlayerList();
          }
 
          var storedVersion = localStorage.getItem('playerVersion');
@@ -1264,7 +1286,15 @@
 
              teams[teamId].players.push({ id: playerId, name: playerName, points: points });
 
+             var removedIndex = availablePlayers.findIndex(function(player) { return player.id === playerId; });
              availablePlayers = availablePlayers.filter(function(player) { return player.id !== playerId; });
+
+             if (removedIndex < currentPlayerIndex) {
+                 currentPlayerIndex--;
+             }
+             if (currentPlayerIndex >= availablePlayers.length) {
+                 currentPlayerIndex = 0;
+             }
 
              localStorage.setItem('teams', JSON.stringify(teams));
              saveAvailableIds();
@@ -1286,7 +1316,6 @@
              if (playerElement) playerElement.classList.remove('dragging');
 
              closeBidModal();
-             advanceToNextPlayer();
              updatePlayerList();
              showBidSplash(playerName, teams[teamId].name, points, playerId);
          }
