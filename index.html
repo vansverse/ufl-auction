@@ -332,35 +332,33 @@
             border: 2px solid rgba(255, 255, 255, 0.15);
          }
 
-         #players {
-            min-width: 320px;
-            max-width: 360px;
+         #auction-panel {
+            min-width: 280px;
+            max-width: 320px;
             position: relative;
             z-index: 1;
+         }
+
+         #available-section {
+            position: relative;
+            z-index: 1;
+            margin-top: 30px;
+            padding: 22px;
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
             border-radius: 18px;
-            padding: 22px;
-            max-height: calc(100vh - 180px);
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(245, 158, 11, 0.3) transparent;
          }
 
-         #players::-webkit-scrollbar { width: 6px; }
-         #players::-webkit-scrollbar-track { background: transparent; }
-         #players::-webkit-scrollbar-thumb { background: rgba(245, 158, 11, 0.3); border-radius: 3px; }
+         #available-section #playerList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+         }
 
-         #players h2 {
-            font-size: 20px;
-            margin-bottom: 14px;
-            color: var(--accent-1);
-            position: sticky;
-            top: 0;
-            background: var(--card-bg);
-            padding-bottom: 8px;
-            z-index: 2;
+         #available-section .player-card {
+            flex: 0 0 auto;
+            width: 180px;
          }
 
          #clearData button {
@@ -370,11 +368,11 @@
             padding: 12px;
             font-size: 14px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-top: 16px;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
-            width: 100%;
+            width: 200px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
          }
@@ -438,8 +436,8 @@
          }
 
          #current-player img {
-            height: 380px;
-            width: 250px;
+            height: 340px;
+            width: 230px;
             object-fit: cover;
             border-radius: 15px;
             border: 3px solid rgba(245, 158, 11, 0.5);
@@ -688,7 +686,7 @@
          @media (max-width: 1400px) {
             #container { flex-wrap: wrap; justify-content: center; }
             .team { flex: 1 1 calc(50% - 20px); min-width: 300px; max-width: 500px; }
-            #players { min-width: 300px; max-width: 100%; max-height: none; flex: 1 1 100%; }
+            #auction-panel { min-width: 280px; max-width: 100%; flex: 1 1 100%; }
          }
 
          @media (max-width: 768px) {
@@ -1066,7 +1064,7 @@
             </table>
          </div>
 
-         <div id="players">
+         <div id="auction-panel">
             <div id="current-player" draggable="true" ondragstart="dragCurrentPlayer(event)">
                <h2>Up For Auction</h2>
                <img id="currentPlayerImg" src="" alt="Current Player Photo" />
@@ -1075,11 +1073,14 @@
                   <button id="skipBtn" onclick="skipCurrentPlayer()" style="background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;padding:10px 24px;font-size:15px;font-weight:700;border-radius:10px;cursor:pointer;font-family:'Winky Rough',sans-serif;letter-spacing:0.5px;transition:all 0.15s;">Skip</button>
                </div>
             </div>
-            <h2>Available Players</h2>
-            <div id="playerList"></div>
-            <div id="clearData">
-               <button>Reset Data</button>
-            </div>
+         </div>
+      </div>
+
+      <div id="available-section">
+         <h2 style="color:var(--accent-1);margin-bottom:14px;position:relative;z-index:1;">Available Players</h2>
+         <div id="playerList"></div>
+         <div id="clearData">
+            <button>Reset Data</button>
          </div>
       </div>
 
@@ -1121,7 +1122,7 @@
              { id: 'player25', name: 'Kalyani', photo: 'Kalyani.jpg' },
              { id: 'player26', name: 'Riddhi', photo: 'Riddhi.JPG' },
              { id: 'player27', name: 'Prajakta', photo: 'Prajakta.jpg' },
-             { id: 'player28', name: 'Smital', photo: '' },
+             { id: 'player28', name: 'Smital', photo: 'Smital.jpg' },
          ];
 
          function getPlayerById(id) {
