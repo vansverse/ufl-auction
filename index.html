@@ -415,7 +415,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: linear-gradient(145deg, rgba(245, 158, 11, 0.2), rgba(59, 130, 246, 0.2));
+            background: transparent;
             border: 2px solid rgba(245, 158, 11, 0.3);
             border-radius: 20px;
             padding: 20px;
@@ -425,9 +425,10 @@
             color: #fff;
             font-family: 'Rubik Mono One', sans-serif;
             transition: transform 0.3s ease;
-            backdrop-filter: blur(8px);
+            cursor: grab;
          }
 
+         #current-player:active { cursor: grabbing; }
          #current-player:hover { transform: scale(1.02); }
 
          #current-player h2 {
@@ -975,6 +976,9 @@
             <h1 class="main-heading">Ultimate Frisbee League Auction</h1>
             <p class="sub-heading">North Park - June - 2026</p>
          </div>
+         <button id="fullscreenBtn" onclick="toggleFullscreen()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(245,158,11,0.3);color:var(--accent-1);padding:10px 16px;border-radius:10px;cursor:pointer;font-size:18px;transition:all 0.2s;flex-shrink:0;" title="Toggle Fullscreen">
+            <i class="fas fa-expand"></i>
+         </button>
       </div>
 
       <div id="container">
@@ -1059,7 +1063,7 @@
          </div>
 
          <div id="players">
-            <div id="current-player">
+            <div id="current-player" draggable="true" ondragstart="dragCurrentPlayer(event)">
                <h2>Up For Auction</h2>
                <img id="currentPlayerImg" src="" alt="Current Player Photo" />
                <span id="currentPlayerName"></span>
@@ -1089,31 +1093,31 @@
              { id: 'player1', name: 'Anupam', photo: 'Anupam.JPG' },
              { id: 'player2', name: 'Hari', photo: 'Hari.jpg' },
              { id: 'player3', name: 'Apurv', photo: 'Apurv.jpg' },
-             { id: 'player4', name: 'Anish', photo: '' },
-             { id: 'player5', name: 'Tapan', photo: 'Tapan.JPG' },
-             { id: 'player6', name: 'Mayank', photo: 'Mayank.jpg' },
+             { id: 'player4', name: 'Aneesh', photo: 'Aneesh.jpg' },
+             { id: 'player5', name: 'Mani', photo: 'Mani.jpg' },
+             { id: 'player6', name: 'Tapan', photo: 'Tapan.JPG' },
              { id: 'player7', name: 'Saurabh', photo: 'Saurabh.jpg' },
-             { id: 'player8', name: 'Mani', photo: 'Mani.jpg' },
+             { id: 'player8', name: 'Mayank', photo: 'Mayank.jpg' },
              { id: 'player9', name: 'Balaji', photo: '' },
-             { id: 'player10', name: 'Ravin', photo: 'Ravin.jpg' },
-             { id: 'player11', name: 'Rathin', photo: '' },
-             { id: 'player12', name: 'Prathamesh', photo: 'Prathamesh.jpg' },
-             { id: 'player13', name: 'Sravan', photo: 'Sravan.jpg' },
+             { id: 'player10', name: 'Rathin', photo: '' },
+             { id: 'player11', name: 'Ravin', photo: 'Ravin.jpg' },
+             { id: 'player12', name: 'Sravan', photo: 'Sravan.jpg' },
+             { id: 'player13', name: 'Nicole', photo: 'Nicole.jpg' },
              { id: 'player14', name: 'Prakshal', photo: 'Prakshal.jpg' },
-             { id: 'player15', name: 'Vaanya', photo: 'Vaanya.PNG' },
-             { id: 'player16', name: 'Mohit', photo: 'Mohit.jpeg' },
-             { id: 'player17', name: 'Daksha', photo: 'Daksha.jpeg' },
-             { id: 'player18', name: 'Sumit', photo: 'Sumit.jpg' },
-             { id: 'player19', name: 'Nihar', photo: 'Nihar.jpg' },
-             { id: 'player20', name: 'Sanjay', photo: '' },
+             { id: 'player15', name: 'Mayuresh', photo: 'Mayuresh.jpg' },
+             { id: 'player16', name: 'Prathamesh', photo: 'Prathamesh.jpg' },
+             { id: 'player17', name: 'Chan', photo: 'Chan.JPG' },
+             { id: 'player18', name: 'Mohit', photo: 'Mohit.jpeg' },
+             { id: 'player19', name: 'Sumit', photo: 'Sumit.jpg' },
+             { id: 'player20', name: 'Sanjay', photo: 'Sanjay.jpg' },
              { id: 'player21', name: 'Nitin', photo: 'Nitin.JPG' },
-             { id: 'player22', name: 'Chan', photo: '' },
-             { id: 'player23', name: 'Kalyani', photo: 'Kalyani.jpg' },
-             { id: 'player24', name: 'Prajakta', photo: '' },
-             { id: 'player25', name: 'Riddhi', photo: '' },
-             { id: 'player26', name: 'Karan', photo: '' },
-             { id: 'player27', name: 'Shiva', photo: 'Shiva.jpg' },
-             { id: 'player28', name: 'GF', photo: '' },
+             { id: 'player22', name: 'Vaanya', photo: 'Vaanya.PNG' },
+             { id: 'player23', name: 'Daksha', photo: 'Daksha.jpeg' },
+             { id: 'player24', name: 'Nihar', photo: 'Nihar.jpg' },
+             { id: 'player25', name: 'Kalyani', photo: 'Kalyani.jpg' },
+             { id: 'player26', name: 'Riddhi', photo: 'Riddhi.JPG' },
+             { id: 'player27', name: 'Prajakta', photo: 'Prajakta.jpg' },
+             { id: 'player28', name: 'Smital', photo: '' },
          ];
 
          function getPlayerById(id) {
@@ -1188,7 +1192,7 @@
          }
 
          var storedVersion = localStorage.getItem('playerVersion');
-         var currentVersion = '2026-v4';
+         var currentVersion = '2026-v5';
          if (storedVersion !== currentVersion) {
              localStorage.clear();
              localStorage.setItem('playerVersion', currentVersion);
@@ -1220,6 +1224,13 @@
              ev.target.classList.add('dragging');
          }
 
+         function dragCurrentPlayer(ev) {
+             var player = getCurrentPlayer();
+             if (!player) { ev.preventDefault(); return; }
+             ev.dataTransfer.setData('text/plain', player.id);
+             document.getElementById('current-player').classList.add('dragging');
+         }
+
          var pendingDrop = null;
 
          function openBidModal(playerName, teamId, playerId, playerElement) {
@@ -1239,6 +1250,7 @@
              if (pendingDrop && pendingDrop.playerElement) {
                  pendingDrop.playerElement.classList.remove('dragging');
              }
+             document.getElementById('current-player').classList.remove('dragging');
              pendingDrop = null;
          }
 
@@ -1379,11 +1391,15 @@
              var playerId = ev.dataTransfer.getData('text/plain');
              var playerElement = document.getElementById(playerId);
              var teamContent = ev.target.closest('.team-content');
-             if (teamContent && !teamContent.contains(playerElement)) {
-                 var teamId = teamContent.parentElement.id;
-                 var playerName = playerElement.textContent.trim();
-                 openBidModal(playerName, teamId, playerId, playerElement);
-             }
+             if (!teamContent) return;
+             var teamId = teamContent.parentElement.id;
+
+             var playerData = getPlayerById(playerId);
+             if (!playerData) return;
+             var playerName = playerData.name;
+
+             var dragSource = playerElement || document.getElementById('current-player');
+             openBidModal(playerName, teamId, playerId, dragSource);
          }
 
          function updatePlayerList() {
@@ -1392,11 +1408,9 @@
              var orderedPlayers = getFixedOrderPlayers();
              var current = getCurrentPlayer();
              orderedPlayers.forEach(function(player) {
+                 if (current && player.id === current.id) return;
                  var playerCard = document.createElement('div');
                  playerCard.className = 'player-card';
-                 if (current && player.id === current.id) {
-                     playerCard.className += ' current-bidding';
-                 }
                  playerCard.id = player.id;
                  playerCard.draggable = true;
                  var photoHtml = player.photo
@@ -1506,6 +1520,28 @@
              updatePlayerList();
              loadTeams();
          };
+
+         function toggleFullscreen() {
+             var btn = document.getElementById('fullscreenBtn');
+             if (!document.fullscreenElement) {
+                 document.documentElement.requestFullscreen().then(function() {
+                     btn.innerHTML = '<i class="fas fa-compress"></i>';
+                 });
+             } else {
+                 document.exitFullscreen().then(function() {
+                     btn.innerHTML = '<i class="fas fa-expand"></i>';
+                 });
+             }
+         }
+
+         document.addEventListener('fullscreenchange', function() {
+             var btn = document.getElementById('fullscreenBtn');
+             if (document.fullscreenElement) {
+                 btn.innerHTML = '<i class="fas fa-compress"></i>';
+             } else {
+                 btn.innerHTML = '<i class="fas fa-expand"></i>';
+             }
+         });
       </script>
    </body>
 </html>
