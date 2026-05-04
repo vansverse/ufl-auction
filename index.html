@@ -1124,6 +1124,123 @@
              teamVenkatesh: { name: 'Venkatesh', points: 7000, players: [] },
          };
 
+         var teamSounds = {
+             teamAnkit: null,
+             teamDeepak: null,
+             teamSuhas: null,
+             teamVenkatesh: null,
+         };
+
+         var audioCtx = null;
+         function getAudioCtx() {
+             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+             return audioCtx;
+         }
+
+         function playTrumpet() {
+             var ctx = getAudioCtx();
+             var osc1 = ctx.createOscillator();
+             var osc2 = ctx.createOscillator();
+             var gain = ctx.createGain();
+             osc1.type = 'sawtooth';
+             osc2.type = 'square';
+             osc2.detune.value = 5;
+             osc1.connect(gain);
+             osc2.connect(gain);
+             gain.connect(ctx.destination);
+             gain.gain.setValueAtTime(0.3, ctx.currentTime);
+             gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
+             var notes = [523, 659, 784, 1047];
+             var t = ctx.currentTime;
+             notes.forEach(function(freq, i) {
+                 osc1.frequency.setValueAtTime(freq, t + i * 0.2);
+                 osc2.frequency.setValueAtTime(freq, t + i * 0.2);
+             });
+             osc1.start(t);
+             osc2.start(t);
+             osc1.stop(t + 1.2);
+             osc2.stop(t + 1.2);
+         }
+
+         function playFaaaa() {
+             var ctx = getAudioCtx();
+             var t = ctx.currentTime;
+             var osc = ctx.createOscillator();
+             var gain = ctx.createGain();
+             osc.type = 'sawtooth';
+             osc.frequency.setValueAtTime(220, t);
+             osc.frequency.linearRampToValueAtTime(180, t + 1.5);
+             osc.connect(gain);
+             gain.connect(ctx.destination);
+             gain.gain.setValueAtTime(0, t);
+             gain.gain.linearRampToValueAtTime(0.35, t + 0.1);
+             gain.gain.setValueAtTime(0.35, t + 1.0);
+             gain.gain.exponentialRampToValueAtTime(0.01, t + 1.8);
+             osc.start(t);
+             osc.stop(t + 1.8);
+             var osc2 = ctx.createOscillator();
+             var gain2 = ctx.createGain();
+             osc2.type = 'sine';
+             osc2.frequency.setValueAtTime(440, t);
+             osc2.frequency.linearRampToValueAtTime(360, t + 1.5);
+             osc2.connect(gain2);
+             gain2.connect(ctx.destination);
+             gain2.gain.setValueAtTime(0, t);
+             gain2.gain.linearRampToValueAtTime(0.2, t + 0.1);
+             gain2.gain.setValueAtTime(0.2, t + 1.0);
+             gain2.gain.exponentialRampToValueAtTime(0.01, t + 1.8);
+             osc2.start(t);
+             osc2.stop(t + 1.8);
+         }
+
+         function playFanfare() {
+             var ctx = getAudioCtx();
+             var t = ctx.currentTime;
+             var melody = [392, 523, 659, 784, 659, 784];
+             var durations = [0.15, 0.15, 0.15, 0.3, 0.15, 0.4];
+             var offset = 0;
+             melody.forEach(function(freq, i) {
+                 var osc = ctx.createOscillator();
+                 var gain = ctx.createGain();
+                 osc.type = 'triangle';
+                 osc.frequency.value = freq;
+                 osc.connect(gain);
+                 gain.connect(ctx.destination);
+                 gain.gain.setValueAtTime(0.3, t + offset);
+                 gain.gain.exponentialRampToValueAtTime(0.01, t + offset + durations[i]);
+                 osc.start(t + offset);
+                 osc.stop(t + offset + durations[i]);
+                 offset += durations[i];
+             });
+         }
+
+         function playVictoryChime() {
+             var ctx = getAudioCtx();
+             var t = ctx.currentTime;
+             var chords = [[523, 659, 784], [587, 740, 880], [659, 784, 1047]];
+             chords.forEach(function(chord, ci) {
+                 chord.forEach(function(freq) {
+                     var osc = ctx.createOscillator();
+                     var gain = ctx.createGain();
+                     osc.type = 'sine';
+                     osc.frequency.value = freq;
+                     osc.connect(gain);
+                     gain.connect(ctx.destination);
+                     gain.gain.setValueAtTime(0.2, t + ci * 0.3);
+                     gain.gain.exponentialRampToValueAtTime(0.01, t + ci * 0.3 + 0.5);
+                     osc.start(t + ci * 0.3);
+                     osc.stop(t + ci * 0.3 + 0.5);
+                 });
+             });
+         }
+
+         function playSoldSound(teamId) {
+             if (teamId === 'teamAnkit') playTrumpet();
+             else if (teamId === 'teamDeepak') playFaaaa();
+             else if (teamId === 'teamSuhas') playFanfare();
+             else if (teamId === 'teamVenkatesh') playVictoryChime();
+         }
+
          var picsBase = './UFLPics';
 
          var initialPlayers = [
@@ -1366,10 +1483,10 @@
 
              closeBidModal();
              updatePlayerList();
-             showBidSplash(playerName, teams[teamId].name, points, playerId);
+             showBidSplash(playerName, teams[teamId].name, points, playerId, teamId);
          }
 
-         function showBidSplash(playerName, teamName, bidAmount, playerId) {
+         function showBidSplash(playerName, teamName, bidAmount, playerId, teamId) {
              var player = getPlayerById(playerId);
              var splashPhoto = document.getElementById('splashPhoto');
              var photoWrap = splashPhoto.parentElement;
@@ -1411,6 +1528,8 @@
              photo.classList.remove('glitch-burst');
              void photo.offsetWidth;
              photo.classList.add('glitch-burst');
+
+             playSoldSound(teamId);
          }
 
          function dismissSplash() {
