@@ -687,12 +687,239 @@
             .sub-heading { font-size: 11px; letter-spacing: 1px; }
             .team-table { overflow-x: auto; display: block; }
          }
+
+         /* Player Bid Splash Overlay */
+         .bid-splash {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            cursor: pointer;
+            overflow: hidden;
+         }
+         .bid-splash.active { display: flex; animation: splashFadeIn 0.3s ease-out; }
+
+         @keyframes splashFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+         }
+
+         .bid-splash::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+               0deg,
+               transparent,
+               transparent 2px,
+               rgba(0, 255, 255, 0.015) 2px,
+               rgba(0, 255, 255, 0.015) 4px
+            );
+            pointer-events: none;
+            animation: scanLines 8s linear infinite;
+            z-index: 1;
+         }
+
+         @keyframes scanLines {
+            from { transform: translateY(0); }
+            to { transform: translateY(100%); }
+         }
+
+         .bid-splash::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(245, 158, 11, 0.05) 10%, transparent 20%);
+            animation: rotateBg 6s linear infinite;
+            pointer-events: none;
+         }
+
+         @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+         }
+
+         .splash-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: splashReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: scale(0.8) translateY(30px);
+         }
+
+         @keyframes splashReveal {
+            0% { opacity: 0; transform: scale(0.8) translateY(30px); filter: blur(10px); }
+            50% { opacity: 1; filter: blur(0); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+         }
+
+         .splash-photo-wrap {
+            position: relative;
+            margin-bottom: 30px;
+         }
+
+         .splash-photo-wrap::before {
+            content: '';
+            position: absolute;
+            top: -8px; left: -8px; right: -8px; bottom: -8px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--accent-1), #3b82f6, #8b5cf6, var(--accent-1));
+            background-size: 300% 300%;
+            animation: borderGlow 3s ease-in-out infinite;
+            z-index: -1;
+         }
+
+         @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+         }
+
+         .splash-photo-wrap::after {
+            content: '';
+            position: absolute;
+            top: -20px; left: -20px; right: -20px; bottom: -20px;
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(245, 158, 11, 0.4), 0 0 120px rgba(59, 130, 246, 0.2);
+            animation: outerGlow 2s ease-in-out infinite alternate;
+            z-index: -2;
+         }
+
+         @keyframes outerGlow {
+            from { box-shadow: 0 0 40px rgba(245, 158, 11, 0.3), 0 0 80px rgba(59, 130, 246, 0.15); }
+            to { box-shadow: 0 0 80px rgba(245, 158, 11, 0.5), 0 0 150px rgba(59, 130, 246, 0.3); }
+         }
+
+         .splash-photo {
+            width: 280px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 18px;
+            display: block;
+            animation: photoGlitch 4s ease-in-out infinite;
+         }
+
+         @keyframes photoGlitch {
+            0%, 95%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            96% { clip-path: inset(20% 0 30% 0); transform: translate(-4px, 0); }
+            97% { clip-path: inset(50% 0 10% 0); transform: translate(4px, 0); }
+            98% { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 0); }
+            99% { clip-path: inset(40% 0 20% 0); transform: translate(2px, 0); }
+         }
+
+         .splash-player-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 32px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.6), 0 0 40px rgba(245, 158, 11, 0.3);
+            animation: textFlicker 3s ease-in-out infinite;
+         }
+
+         @keyframes textFlicker {
+            0%, 92%, 94%, 96%, 100% { opacity: 1; }
+            93% { opacity: 0.8; }
+            95% { opacity: 0.9; }
+         }
+
+         .splash-team-info {
+            font-size: 20px;
+            color: var(--accent-1);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+         }
+
+         .splash-bid-amount {
+            font-family: 'Rubik Mono One', sans-serif;
+            font-size: 48px;
+            color: #10b981;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+            animation: bidPulse 1.5s ease-in-out infinite alternate;
+         }
+
+         @keyframes bidPulse {
+            from { transform: scale(1); text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+            to { transform: scale(1.05); text-shadow: 0 0 40px rgba(16, 185, 129, 0.7); }
+         }
+
+         .splash-dismiss {
+            position: absolute;
+            bottom: 40px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 2px;
+            animation: blink 2s ease-in-out infinite;
+         }
+
+         @keyframes blink {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+         }
+
+         .splash-particles {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+         }
+
+         .splash-particles span {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-1);
+            border-radius: 50%;
+            animation: particleFloat 3s ease-in-out infinite;
+            opacity: 0.6;
+         }
+
+         @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+         }
+
+         .splash-no-photo {
+            width: 280px;
+            height: 350px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(59, 130, 246, 0.3));
+            font-family: 'Press Start 2P', cursive;
+            font-size: 80px;
+            color: #fff;
+         }
       </style>
    </head>
    <body>
       <div id="photoModal">
          <img id="modalImage" src="" />
          <div><h1></h1></div>
+      </div>
+
+      <div class="bid-splash" id="bidSplash" onclick="dismissSplash()">
+         <div class="splash-particles" id="splashParticles"></div>
+         <div class="splash-content">
+            <div class="splash-photo-wrap">
+               <img class="splash-photo" id="splashPhoto" src="" alt="" />
+            </div>
+            <div class="splash-player-name" id="splashName"></div>
+            <div class="splash-team-info" id="splashTeam"></div>
+            <div class="splash-bid-amount" id="splashBid"></div>
+         </div>
+         <div class="splash-dismiss">CLICK ANYWHERE TO CONTINUE</div>
       </div>
 
       <div class="bid-overlay" id="bidOverlay">
@@ -1011,6 +1238,50 @@
              if (playerElement) playerElement.classList.remove('dragging');
 
              closeBidModal();
+             showBidSplash(playerName, teams[teamId].name, points, playerId);
+         }
+
+         function showBidSplash(playerName, teamName, bidAmount, playerId) {
+             var player = getPlayerById(playerId);
+             var splashPhoto = document.getElementById('splashPhoto');
+             var photoWrap = splashPhoto.parentElement;
+
+             var existingNoPhoto = photoWrap.querySelector('.splash-no-photo');
+             if (existingNoPhoto) existingNoPhoto.remove();
+             splashPhoto.style.display = 'block';
+
+             if (player && player.photo) {
+                 splashPhoto.src = picsBase + '/' + player.photo;
+                 splashPhoto.style.display = 'block';
+             } else {
+                 splashPhoto.style.display = 'none';
+                 var placeholder = document.createElement('div');
+                 placeholder.className = 'splash-no-photo';
+                 placeholder.textContent = playerName.charAt(0);
+                 photoWrap.appendChild(placeholder);
+             }
+
+             document.getElementById('splashName').textContent = playerName;
+             document.getElementById('splashTeam').textContent = 'SOLD TO TEAM ' + teamName;
+             document.getElementById('splashBid').textContent = bidAmount + ' PTS';
+
+             var particlesContainer = document.getElementById('splashParticles');
+             particlesContainer.innerHTML = '';
+             for (var i = 0; i < 20; i++) {
+                 var particle = document.createElement('span');
+                 particle.style.left = Math.random() * 100 + '%';
+                 particle.style.animationDelay = Math.random() * 3 + 's';
+                 particle.style.animationDuration = (2 + Math.random() * 2) + 's';
+                 var colors = ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899'];
+                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                 particlesContainer.appendChild(particle);
+             }
+
+             document.getElementById('bidSplash').classList.add('active');
+         }
+
+         function dismissSplash() {
+             document.getElementById('bidSplash').classList.remove('active');
          }
 
          document.getElementById('bidInput').addEventListener('keydown', function(e) {
