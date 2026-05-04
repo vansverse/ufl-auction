@@ -301,6 +301,28 @@
             box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
          }
 
+         .player-card.next-player {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);
+            position: relative;
+         }
+
+         .player-card.next-player::after {
+            content: 'NEXT';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            font-weight: 700;
+            color: #3b82f6;
+            letter-spacing: 1px;
+            background: rgba(59, 130, 246, 0.15);
+            padding: 2px 8px;
+            border-radius: 4px;
+         }
+
          .current-no-photo {
             height: 380px;
             width: 250px;
@@ -1422,15 +1444,25 @@
              openBidModal(playerName, teamId, playerId, dragSource);
          }
 
+         function getNextPlayer() {
+             if (availablePlayers.length <= 1) return null;
+             var nextIndex = (currentPlayerIndex + 1) % availablePlayers.length;
+             return availablePlayers[nextIndex];
+         }
+
          function updatePlayerList() {
              var playerList = document.getElementById('playerList');
              playerList.innerHTML = '';
              var orderedPlayers = getFixedOrderPlayers();
              var current = getCurrentPlayer();
+             var next = getNextPlayer();
              orderedPlayers.forEach(function(player) {
                  if (current && player.id === current.id) return;
                  var playerCard = document.createElement('div');
                  playerCard.className = 'player-card';
+                 if (next && player.id === next.id) {
+                     playerCard.className += ' next-player';
+                 }
                  playerCard.id = player.id;
                  playerCard.draggable = true;
                  var photoHtml = player.photo
