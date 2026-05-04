@@ -295,6 +295,12 @@
             border-color: rgba(245, 158, 11, 0.3);
          }
 
+         .player-card.current-bidding {
+            background: rgba(245, 158, 11, 0.12);
+            border: 2px solid var(--accent-1);
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
+         }
+
          .player-card.dragging {
             opacity: 0.4;
             border-style: dotted;
@@ -836,6 +842,7 @@
             margin-bottom: 8px;
             letter-spacing: 2px;
             text-transform: uppercase;
+            font-weight: 900;
          }
 
          .splash-bid-amount {
@@ -1036,12 +1043,15 @@
          </div>
 
          <div id="players">
-            <div id="current-player" style="display: none;">
-               <h2>Current Player</h2>
-               <img src="" alt="Current Player Photo" />
+            <div id="current-player">
+               <h2>Up For Auction</h2>
+               <img id="currentPlayerImg" src="" alt="Current Player Photo" />
+               <span id="currentPlayerName"></span>
+               <div style="display:flex;gap:10px;margin-top:14px;">
+                  <button id="skipBtn" onclick="skipCurrentPlayer()" style="background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;padding:10px 24px;font-size:15px;font-weight:700;border-radius:10px;cursor:pointer;font-family:'Winky Rough',sans-serif;letter-spacing:0.5px;transition:all 0.15s;">Skip</button>
+               </div>
             </div>
             <h2>Available Players</h2>
-            <div id="player-photo-display"></div>
             <div id="playerList"></div>
             <div id="clearData">
                <button>Reset Data</button>
@@ -1094,16 +1104,65 @@
              return initialPlayers.find(function(p) { return p.id === id; });
          }
 
+         var currentPlayerIndex = 0;
+
          function saveAvailableIds() {
              var ids = availablePlayers.map(function(p) { return p.id; });
              localStorage.setItem('availablePlayerIds', JSON.stringify(ids));
+             localStorage.setItem('currentPlayerIndex', currentPlayerIndex);
          }
 
          function loadAvailablePlayers() {
              var stored = localStorage.getItem('availablePlayerIds');
+             currentPlayerIndex = parseInt(localStorage.getItem('currentPlayerIndex')) || 0;
              if (!stored) return initialPlayers.slice();
              var ids = JSON.parse(stored);
-             return ids.map(function(id) { return getPlayerById(id); }).filter(Boolean);
+             return initialPlayers.filter(function(p) { return ids.indexOf(p.id) !== -1; });
+         }
+
+         function getCurrentPlayer() {
+             if (availablePlayers.length === 0) return null;
+             if (currentPlayerIndex >= availablePlayers.length) currentPlayerIndex = 0;
+             return availablePlayers[currentPlayerIndex];
+         }
+
+         function updateCurrentPlayerDisplay() {
+             var player = getCurrentPlayer();
+             var container = document.getElementById('current-player');
+             var img = document.getElementById('currentPlayerImg');
+             var nameEl = document.getElementById('currentPlayerName');
+             var skipBtn = document.getElementById('skipBtn');
+
+             if (!player) {
+                 container.style.display = 'none';
+                 return;
+             }
+
+             container.style.display = 'flex';
+             nameEl.textContent = player.name;
+
+             if (player.photo) {
+                 img.src = picsBase + '/' + player.photo;
+                 img.style.display = 'block';
+             } else {
+                 img.src = '';
+                 img.style.display = 'none';
+             }
+         }
+
+         function skipCurrentPlayer() {
+             if (availablePlayers.length <= 1) return;
+             currentPlayerIndex = (currentPlayerIndex + 1) % availablePlayers.length;
+             saveAvailableIds();
+             updateCurrentPlayerDisplay();
+         }
+
+         function advanceToNextPlayer() {
+             if (currentPlayerIndex >= availablePlayers.length) {
+                 currentPlayerIndex = 0;
+             }
+             saveAvailableIds();
+             updateCurrentPlayerDisplay();
          }
 
          var storedVersion = localStorage.getItem('playerVersion');
@@ -1116,20 +1175,10 @@
          var teams = JSON.parse(localStorage.getItem('teams')) || defaultTeams;
          var availablePlayers = loadAvailablePlayers();
 
-         document.addEventListener('click', function(e) {
-             if (e.target.classList.contains('player-photo') && e.target.src) {
-                 var container = document.querySelector('#current-player');
-                 var frame = container.querySelector('img');
-                 if (frame) {
-                     frame.src = e.target.src;
-                 } else {
-                     var newImg = document.createElement('img');
-                     newImg.src = e.target.src;
-                     container.appendChild(newImg);
-                 }
-                 container.style.display = 'block';
-             }
-         });
+         function getFixedOrderPlayers() {
+             var availableIds = availablePlayers.map(function(p) { return p.id; });
+             return initialPlayers.filter(function(p) { return availableIds.indexOf(p.id) !== -1; });
+         }
 
          function allowDrop(ev) { ev.preventDefault(); }
 
@@ -1234,10 +1283,11 @@
                  document.getElementById('team' + storedTeam.name).classList.add('team-full');
              }
 
-             updatePlayerList();
              if (playerElement) playerElement.classList.remove('dragging');
 
              closeBidModal();
+             advanceToNextPlayer();
+             updatePlayerList();
              showBidSplash(playerName, teams[teamId].name, points, playerId);
          }
 
@@ -1310,9 +1360,14 @@
          function updatePlayerList() {
              var playerList = document.getElementById('playerList');
              playerList.innerHTML = '';
-             availablePlayers.forEach(function(player) {
+             var orderedPlayers = getFixedOrderPlayers();
+             var current = getCurrentPlayer();
+             orderedPlayers.forEach(function(player) {
                  var playerCard = document.createElement('div');
                  playerCard.className = 'player-card';
+                 if (current && player.id === current.id) {
+                     playerCard.className += ' current-bidding';
+                 }
                  playerCard.id = player.id;
                  playerCard.draggable = true;
                  var photoHtml = player.photo
@@ -1323,6 +1378,7 @@
                  playerCard.ondragend = function() { playerCard.classList.remove('dragging'); };
                  playerList.appendChild(playerCard);
              });
+             updateCurrentPlayerDisplay();
          }
 
          function removePlayerFromTeam(playerId, teamId) {
@@ -1341,6 +1397,9 @@
 
              var original = getPlayerById(playerId);
              availablePlayers.push(original || { id: playerId, name: playerName, photo: '' });
+             availablePlayers = initialPlayers.filter(function(p) {
+                 return availablePlayers.some(function(a) { return a.id === p.id; });
+             });
 
              team.points += points;
              document.getElementById(
