@@ -1147,7 +1147,7 @@
              osc1.connect(gain);
              osc2.connect(gain);
              gain.connect(ctx.destination);
-             gain.gain.setValueAtTime(0.3, ctx.currentTime);
+             gain.gain.setValueAtTime(0.1, ctx.currentTime);
              gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
              var notes = [523, 659, 784, 1047];
              var t = ctx.currentTime;
@@ -1161,25 +1161,33 @@
              osc2.stop(t + 1.2);
          }
 
-         function playAirHorn() {
+         function playDrumRoll() {
              var ctx = getAudioCtx();
              var t = ctx.currentTime;
-             [280, 560, 840].forEach(function(freq) {
+             for (var i = 0; i < 12; i++) {
                  var osc = ctx.createOscillator();
                  var gain = ctx.createGain();
-                 osc.type = 'square';
-                 osc.frequency.setValueAtTime(freq, t);
-                 osc.frequency.setValueAtTime(freq * 1.02, t + 0.3);
-                 osc.frequency.setValueAtTime(freq, t + 0.6);
+                 osc.type = 'triangle';
+                 osc.frequency.value = 150 + Math.random() * 50;
                  osc.connect(gain);
                  gain.connect(ctx.destination);
-                 gain.gain.setValueAtTime(0, t);
-                 gain.gain.linearRampToValueAtTime(0.12, t + 0.05);
-                 gain.gain.setValueAtTime(0.12, t + 0.7);
-                 gain.gain.exponentialRampToValueAtTime(0.001, t + 1.0);
-                 osc.start(t);
-                 osc.stop(t + 1.0);
-             });
+                 var start = t + i * 0.08;
+                 gain.gain.setValueAtTime(0.15, start);
+                 gain.gain.exponentialRampToValueAtTime(0.01, start + 0.07);
+                 osc.start(start);
+                 osc.stop(start + 0.07);
+             }
+             var finalOsc = ctx.createOscillator();
+             var finalGain = ctx.createGain();
+             finalOsc.type = 'sine';
+             finalOsc.frequency.value = 440;
+             finalOsc.connect(finalGain);
+             finalGain.connect(ctx.destination);
+             var finalStart = t + 1.0;
+             finalGain.gain.setValueAtTime(0.2, finalStart);
+             finalGain.gain.exponentialRampToValueAtTime(0.01, finalStart + 0.4);
+             finalOsc.start(finalStart);
+             finalOsc.stop(finalStart + 0.4);
          }
 
          function playFanfare() {
@@ -1225,7 +1233,7 @@
 
          function playSoldSound(teamId) {
              if (teamId === 'teamDeepak') playTrumpet();
-             else if (teamId === 'teamMani') playAirHorn();
+             else if (teamId === 'teamMani') playDrumRoll();
              else if (teamId === 'teamSuhas') playFanfare();
              else if (teamId === 'teamVenkatesh') playVictoryChime();
          }
