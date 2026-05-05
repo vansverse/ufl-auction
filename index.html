@@ -1162,35 +1162,25 @@
              osc2.stop(t + 1.2);
          }
 
-         function playFaaaa() {
+         function playAirHorn() {
              var ctx = getAudioCtx();
              var t = ctx.currentTime;
-             var osc = ctx.createOscillator();
-             var gain = ctx.createGain();
-             osc.type = 'sawtooth';
-             osc.frequency.setValueAtTime(220, t);
-             osc.frequency.linearRampToValueAtTime(180, t + 1.5);
-             osc.connect(gain);
-             gain.connect(ctx.destination);
-             gain.gain.setValueAtTime(0, t);
-             gain.gain.linearRampToValueAtTime(0.35, t + 0.1);
-             gain.gain.setValueAtTime(0.35, t + 1.0);
-             gain.gain.exponentialRampToValueAtTime(0.01, t + 1.8);
-             osc.start(t);
-             osc.stop(t + 1.8);
-             var osc2 = ctx.createOscillator();
-             var gain2 = ctx.createGain();
-             osc2.type = 'sine';
-             osc2.frequency.setValueAtTime(440, t);
-             osc2.frequency.linearRampToValueAtTime(360, t + 1.5);
-             osc2.connect(gain2);
-             gain2.connect(ctx.destination);
-             gain2.gain.setValueAtTime(0, t);
-             gain2.gain.linearRampToValueAtTime(0.2, t + 0.1);
-             gain2.gain.setValueAtTime(0.2, t + 1.0);
-             gain2.gain.exponentialRampToValueAtTime(0.01, t + 1.8);
-             osc2.start(t);
-             osc2.stop(t + 1.8);
+             [280, 560, 840].forEach(function(freq) {
+                 var osc = ctx.createOscillator();
+                 var gain = ctx.createGain();
+                 osc.type = 'square';
+                 osc.frequency.setValueAtTime(freq, t);
+                 osc.frequency.setValueAtTime(freq * 1.02, t + 0.3);
+                 osc.frequency.setValueAtTime(freq, t + 0.6);
+                 osc.connect(gain);
+                 gain.connect(ctx.destination);
+                 gain.gain.setValueAtTime(0, t);
+                 gain.gain.linearRampToValueAtTime(0.12, t + 0.05);
+                 gain.gain.setValueAtTime(0.12, t + 0.7);
+                 gain.gain.exponentialRampToValueAtTime(0.001, t + 1.0);
+                 osc.start(t);
+                 osc.stop(t + 1.0);
+             });
          }
 
          function playFanfare() {
@@ -1236,7 +1226,7 @@
 
          function playSoldSound(teamId) {
              if (teamId === 'teamAnkit') playTrumpet();
-             else if (teamId === 'teamDeepak') playFaaaa();
+             else if (teamId === 'teamDeepak') playAirHorn();
              else if (teamId === 'teamSuhas') playFanfare();
              else if (teamId === 'teamVenkatesh') playVictoryChime();
          }
@@ -1430,9 +1420,12 @@
              var playerName = pendingDrop.playerName;
              var playerElement = pendingDrop.playerElement;
 
-             if (teams[teamId].points < points) {
+             var playersRemaining = 7 - teams[teamId].players.length;
+             var maxBid = Math.max(0, teams[teamId].points - (playersRemaining - 1) * 100);
+
+             if (points > maxBid) {
                  input.classList.add('bid-error');
-                 document.getElementById('bidError').textContent = 'Not enough points! ' + teams[teamId].points + ' available';
+                 document.getElementById('bidError').textContent = 'Max bid is ' + maxBid + '! Must reserve 100 per remaining player';
                  return;
              }
 
