@@ -119,6 +119,12 @@
             position: relative;
             z-index: 1;
             width: 100%;
+            justify-content: flex-start;
+            transition: justify-content 0.3s ease;
+         }
+
+         #container.auction-complete {
+            justify-content: center;
          }
 
          .team {
@@ -1483,6 +1489,7 @@
 
              closeBidModal();
              updatePlayerList();
+             checkAuctionComplete();
              showBidSplash(playerName, teams[teamId].name, points, playerId, teamId);
          }
 
@@ -1644,6 +1651,7 @@
              document.getElementById('team' + storedTeam.name).classList.remove('team-full');
 
              updatePlayerList();
+             checkAuctionComplete();
          }
 
          function loadTeams() {
@@ -1687,9 +1695,27 @@
              }
          });
 
+         function checkAuctionComplete() {
+             var allFull = Object.keys(teams).every(function(teamId) {
+                 return teams[teamId].players.length === 7;
+             });
+             var container = document.getElementById('container');
+             var auctionPanel = document.getElementById('auction-panel');
+             var availableSection = document.getElementById('available-section');
+             if (allFull) {
+                 auctionPanel.style.display = 'none';
+                 availableSection.style.display = 'none';
+                 container.classList.add('auction-complete');
+             } else {
+                 auctionPanel.style.display = '';
+                 container.classList.remove('auction-complete');
+             }
+         }
+
          window.onload = function() {
              updatePlayerList();
              loadTeams();
+             checkAuctionComplete();
          };
 
          function toggleFullscreen() {
