@@ -1022,6 +1022,26 @@
       </div>
 
       <div id="container">
+         <div class="team" id="teamHari">
+            <div class="captain-avatar">
+               <img src="./UFLPics/Hari.jpg" alt="Hari" />
+            </div>
+            <h2 class="team-header">Hari</h2>
+            <div class="team-points">
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsHari">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersHari">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidHari">6400</span></div>
+            </div>
+            <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <p>Drag players here</p>
+            </div>
+            <h3>Team Roster</h3>
+            <table class="team-table">
+               <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
+               <tbody id="teamHariRoster"></tbody>
+            </table>
+         </div>
+
          <div class="team" id="teamDeepak">
             <div class="captain-avatar">
                <img src="./UFLPics/Deepak.jpg" alt="Deepak" />
@@ -1042,15 +1062,15 @@
             </table>
          </div>
 
-         <div class="team" id="teamMani">
+         <div class="team" id="teamAnkit">
             <div class="captain-avatar">
-               <img src="./UFLPics/Mani.jpg" alt="Mani" />
+               <img src="./UFLPics/Ankit.jpg" alt="Ankit" />
             </div>
-            <h2 class="team-header">Mani</h2>
+            <h2 class="team-header">Ankit</h2>
             <div class="team-points">
-               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsMani">7000</span></div>
-               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersMani">7</span></div>
-               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidMani">6400</span></div>
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsAnkit">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersAnkit">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidAnkit">6400</span></div>
             </div>
             <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <p>Drag players here</p>
@@ -1058,19 +1078,19 @@
             <h3>Team Roster</h3>
             <table class="team-table">
                <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
-               <tbody id="teamManiRoster"></tbody>
+               <tbody id="teamAnkitRoster"></tbody>
             </table>
          </div>
 
-         <div class="team" id="teamSuhas">
+         <div class="team" id="teamTapan">
             <div class="captain-avatar">
-               <img src="./UFLPics/Suhas.JPG" alt="Suhas" />
+               <img src="./UFLPics/Tapan.JPG" alt="Tapan" />
             </div>
-            <h2 class="team-header">Suhas</h2>
+            <h2 class="team-header">Tapan</h2>
             <div class="team-points">
-               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsSuhas">7000</span></div>
-               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersSuhas">7</span></div>
-               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidSuhas">6400</span></div>
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsTapan">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersTapan">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidTapan">6400</span></div>
             </div>
             <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <p>Drag players here</p>
@@ -1078,19 +1098,19 @@
             <h3>Team Roster</h3>
             <table class="team-table">
                <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
-               <tbody id="teamSuhasRoster"></tbody>
+               <tbody id="teamTapanRoster"></tbody>
             </table>
          </div>
 
-         <div class="team" id="teamVenkatesh">
+         <div class="team" id="teamSravan">
             <div class="captain-avatar">
-               <img src="./UFLPics/Venkatesh.jpg" alt="Venkatesh" />
+               <img src="./UFLPics/Sravan.jpg" alt="Sravan" />
             </div>
-            <h2 class="team-header">Venkatesh</h2>
+            <h2 class="team-header">Sravan</h2>
             <div class="team-points">
-               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsVenkatesh">7000</span></div>
-               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersVenkatesh">7</span></div>
-               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidVenkatesh">6400</span></div>
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsSravan">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersSravan">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidSravan">6400</span></div>
             </div>
             <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <p>Drag players here</p>
@@ -1098,7 +1118,7 @@
             <h3>Team Roster</h3>
             <table class="team-table">
                <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
-               <tbody id="teamVenkateshRoster"></tbody>
+               <tbody id="teamSravanRoster"></tbody>
             </table>
          </div>
 
@@ -1123,17 +1143,19 @@
 
       <script>
          var defaultTeams = {
+             teamHari: { name: 'Hari', points: 7000, players: [] },
              teamDeepak: { name: 'Deepak', points: 7000, players: [] },
-             teamMani: { name: 'Mani', points: 7000, players: [] },
-             teamSuhas: { name: 'Suhas', points: 7000, players: [] },
-             teamVenkatesh: { name: 'Venkatesh', points: 7000, players: [] },
+             teamAnkit: { name: 'Ankit', points: 7000, players: [] },
+             teamTapan: { name: 'Tapan', points: 7000, players: [] },
+             teamSravan: { name: 'Sravan', points: 7000, players: [] },
          };
 
          var teamSounds = {
+             teamHari: null,
              teamDeepak: null,
-             teamMani: null,
-             teamSuhas: null,
-             teamVenkatesh: null,
+             teamAnkit: null,
+             teamTapan: null,
+             teamSravan: null,
          };
 
          var audioCtx = null;
@@ -1238,43 +1260,51 @@
          }
 
          function playSoldSound(teamId) {
-             if (teamId === 'teamDeepak') playTrumpet();
-             else if (teamId === 'teamMani') playDrumRoll();
-             else if (teamId === 'teamSuhas') playFanfare();
-             else if (teamId === 'teamVenkatesh') playVictoryChime();
+             if (teamId === 'teamHari') playTrumpet();
+             else if (teamId === 'teamDeepak') playDrumRoll();
+             else if (teamId === 'teamAnkit') playFanfare();
+             else if (teamId === 'teamTapan') playVictoryChime();
+             else if (teamId === 'teamSravan') playTrumpet();
          }
 
          var picsBase = './UFLPics';
 
          var initialPlayers = [
-             { id: 'player1', name: 'Anupam', photo: 'Anupam.JPG' },
-             { id: 'player2', name: 'Hari', photo: 'Hari.jpg' },
-             { id: 'player3', name: 'Apurv', photo: 'Apurv.jpg' },
-             { id: 'player4', name: 'Aneesh', photo: 'Aneesh.jpg' },
-             { id: 'player5', name: 'Tapan', photo: 'Tapan.JPG' },
+             { id: 'player1', name: 'Ligin', photo: 'Ligin.jpg' },
+             { id: 'player2', name: 'Apurv', photo: 'Apurv.jpg' },
+             { id: 'player3', name: 'Aneesh', photo: 'Aneesh.jpg' },
+             { id: 'player4', name: 'Mani', photo: 'Mani.jpg' },
+             { id: 'player5', name: 'Suhas', photo: 'Suhas.JPG' },
              { id: 'player6', name: 'Saurabh', photo: 'Saurabh.jpg' },
-             { id: 'player7', name: 'Mayank', photo: 'Mayank.jpg' },
-             { id: 'player8', name: 'Balaji', photo: 'Balaji.jpg' },
-             { id: 'player9', name: 'Rathin', photo: '' },
-             { id: 'player10', name: 'Ravin', photo: 'Ravin.jpg' },
-             { id: 'player11', name: 'Sravan', photo: 'Sravan.jpg' },
+             { id: 'player7', name: 'Akshay', photo: 'Akshay.jpg' },
+             { id: 'player8', name: 'Venkatesh', photo: 'Venkatesh.jpg' },
+             { id: 'player9', name: 'Balaji', photo: 'Balaji.jpg' },
+             { id: 'player10', name: 'Mayuresh', photo: 'Mayuresh.jpg' },
+             { id: 'player11', name: 'Krishna', photo: 'Krishna.jpg' },
              { id: 'player12', name: 'Nicole', photo: 'Nicole.jpg' },
              { id: 'player13', name: 'Prakshal', photo: 'Prakshal.jpg' },
-             { id: 'player14', name: 'Mayuresh', photo: 'Mayuresh.jpg' },
-             { id: 'player15', name: 'Prathamesh', photo: 'Prathamesh.jpg' },
-             { id: 'player16', name: 'Chan', photo: 'Chan.JPG' },
-             { id: 'player17', name: 'Mohit', photo: 'Mohit.jpeg' },
-             { id: 'player18', name: 'Sumit', photo: 'Sumit.jpg' },
-             { id: 'player19', name: 'Sanjay', photo: 'Sanjay.jpg' },
-             { id: 'player20', name: 'Nitin', photo: 'Nitin.JPG' },
-             { id: 'player21', name: 'Tanay', photo: '' },
-             { id: 'player22', name: 'Vaanya', photo: 'Vaanya.jpeg' },
-             { id: 'player23', name: 'Daksha', photo: 'Daksha.jpeg' },
-             { id: 'player24', name: 'Nihar', photo: 'Nihar.jpg' },
-             { id: 'player25', name: 'Kalyani', photo: 'Kalyani.jpg' },
-             { id: 'player26', name: 'Riddhi', photo: 'Riddhi.JPG' },
-             { id: 'player27', name: 'Prajakta', photo: 'Prajakta.jpg' },
-             { id: 'player28', name: 'Smital', photo: 'Smital.jpg' },
+             { id: 'player14', name: 'Ravin', photo: 'Ravin.jpg' },
+             { id: 'player15', name: 'DJ', photo: 'DJ.jpg' },
+             { id: 'player16', name: 'Ajj', photo: 'Ajj.PNG' },
+             { id: 'player17', name: 'Raghavan', photo: 'Raghavan.jpg' },
+             { id: 'player18', name: 'Nitin', photo: 'Nitin.JPG' },
+             { id: 'player19', name: 'Jordan', photo: 'Jordan.jpg' },
+             { id: 'player20', name: 'Mohit', photo: 'Mohit.jpeg' },
+             { id: 'player21', name: 'Varun', photo: 'Varun.jpg' },
+             { id: 'player22', name: 'Shiva', photo: 'Shiva.jpg' },
+             { id: 'player23', name: 'Sanjay', photo: 'Sanjay.jpg' },
+             { id: 'player24', name: 'Vaanya', photo: 'Vaanya.jpeg' },
+             { id: 'player25', name: 'Nihar', photo: 'Nihar.jpg' },
+             { id: 'player26', name: 'Daksha', photo: 'Daksha.jpeg' },
+             { id: 'player27', name: 'Viral', photo: 'Viral.jpg' },
+             { id: 'player28', name: 'Smera', photo: 'Smera.jpg' },
+             { id: 'player29', name: 'Simon', photo: '' },
+             { id: 'player30', name: 'Viraj', photo: 'Viraj.jpg' },
+             { id: 'player31', name: 'Prajakta', photo: 'Prajakta.jpg' },
+             { id: 'player32', name: 'Riddhi', photo: 'Riddhi.JPG' },
+             { id: 'player33', name: 'Priyanka', photo: 'Priyanka.PNG' },
+             { id: 'player34', name: 'Adnan', photo: '' },
+             { id: 'player35', name: 'Manali', photo: '' },
          ];
 
          function getPlayerById(id) {
