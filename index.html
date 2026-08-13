@@ -1111,6 +1111,52 @@
             font-size: 80px;
             color: #fff;
          }
+
+         .splash-frisbee {
+            position: absolute;
+            top: 28%;
+            left: 0;
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+         }
+
+         .splash-frisbee.fly-1 { top: 24%; }
+         .splash-frisbee.fly-2 { top: 62%; animation-direction: reverse; }
+
+         .splash-frisbee.flying {
+            animation: frisbeeFly 2.4s cubic-bezier(0.33, 0, 0.2, 1) forwards;
+         }
+
+         .frisbee-disc {
+            position: relative;
+            display: block;
+            width: 64px;
+            height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #fff7e6 0%, var(--accent-1) 55%, #b45309 100%);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.55), inset 0 -6px 8px rgba(0, 0, 0, 0.25);
+         }
+
+         .frisbee-disc::after {
+            content: '';
+            position: absolute;
+            top: 16%;
+            left: 14%;
+            width: 45%;
+            height: 22%;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: 50%;
+            filter: blur(1px);
+         }
+
+         @keyframes frisbeeFly {
+            0%   { transform: translate(-15vw, 20px) rotate(0deg) scale(0.7); opacity: 0; }
+            10%  { opacity: 1; }
+            50%  { transform: translate(50vw, -70px) rotate(380deg) scale(1.2); }
+            90%  { opacity: 1; }
+            100% { transform: translate(115vw, 30px) rotate(720deg) scale(0.8); opacity: 0; }
+         }
       </style>
    </head>
    <body>
@@ -1121,6 +1167,8 @@
 
       <div class="bid-splash" id="bidSplash" onclick="dismissSplash()">
          <div class="splash-particles" id="splashParticles"></div>
+         <div class="splash-frisbee fly-1" id="splashFrisbee1"><span class="frisbee-disc"></span></div>
+         <div class="splash-frisbee fly-2" id="splashFrisbee2"><span class="frisbee-disc"></span></div>
          <div class="splash-content">
             <div class="splash-photo-wrap">
                <img class="splash-photo" id="splashPhoto" src="" alt="" />
@@ -1804,6 +1852,13 @@
              photo.classList.remove('glitch-burst');
              void photo.offsetWidth;
              photo.classList.add('glitch-burst');
+
+             ['splashFrisbee1', 'splashFrisbee2'].forEach(function(id) {
+                 var frisbee = document.getElementById(id);
+                 frisbee.classList.remove('flying');
+                 void frisbee.offsetWidth;
+                 frisbee.classList.add('flying');
+             });
 
              playSoldSound(teamId);
          }
