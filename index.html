@@ -1145,49 +1145,6 @@
             color: #fff;
          }
 
-         .splash-frisbee {
-            position: absolute;
-            left: -14vw;
-            top: 94vh;
-            z-index: 3;
-            opacity: 0;
-            pointer-events: none;
-            transform: rotate(0deg) scale(0.8);
-         }
-
-         .splash-frisbee.flying {
-            animation: frisbeeFly 2.6s cubic-bezier(0.22, 0.61, 0.16, 1) forwards;
-         }
-
-         .frisbee-disc {
-            position: relative;
-            display: block;
-            width: 90px;
-            height: 56px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 30%, #fff7e6 0%, var(--accent-1) 55%, #b45309 100%);
-            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.55), inset 0 -6px 8px rgba(0, 0, 0, 0.25);
-         }
-
-         .frisbee-disc::after {
-            content: '';
-            position: absolute;
-            top: 16%;
-            left: 14%;
-            width: 45%;
-            height: 22%;
-            background: rgba(255, 255, 255, 0.55);
-            border-radius: 50%;
-            filter: blur(1px);
-         }
-
-         @keyframes frisbeeFly {
-            0%   { left: -14vw; top: 94vh; transform: rotate(0deg) scale(0.8); opacity: 0; }
-            10%  { opacity: 1; }
-            75%  { left: 84vw; top: 8vh; transform: rotate(560deg) scale(1.2); opacity: 1; }
-            100% { left: 80vw; top: 6vh; transform: rotate(600deg) scale(1); opacity: 1; }
-         }
-
          .wind-gust {
             position: absolute;
             inset: 0;
@@ -1242,7 +1199,6 @@
             <span class="wind-streak"></span>
             <span class="wind-streak"></span>
          </div>
-         <div class="splash-frisbee" id="splashFrisbee"><span class="frisbee-disc"></span></div>
          <div class="splash-content">
             <div class="splash-photo-wrap">
                <img class="splash-photo" id="splashPhoto" src="" alt="" />
@@ -1993,11 +1949,6 @@
              photo.classList.remove('glitch-burst');
              void photo.offsetWidth;
              photo.classList.add('glitch-burst');
-
-             var frisbee = document.getElementById('splashFrisbee');
-             frisbee.classList.remove('flying');
-             void frisbee.offsetWidth;
-             frisbee.classList.add('flying');
 
              var windGust = document.getElementById('splashWindGust');
              windGust.classList.remove('gusting');
