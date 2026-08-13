@@ -251,7 +251,7 @@
 
          .team-points .stat-row .stat-value {
             font-weight: 900;
-            font-size: 36px;
+            font-size: 22px;
             color: var(--accent-1);
             text-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
             letter-spacing: 1px;
@@ -344,8 +344,8 @@
 
          .current-no-photo {
             grid-area: photo;
-            height: 140px;
-            width: 100px;
+            height: 170px;
+            width: 125px;
             border-radius: 12px;
             border: 3px solid rgba(245, 158, 11, 0.5);
             box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
@@ -354,7 +354,7 @@
             justify-content: center;
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(59, 130, 246, 0.2));
             font-family: 'Press Start 2P', cursive;
-            font-size: 36px;
+            font-size: 44px;
             color: #fff;
          }
 
@@ -454,27 +454,27 @@
 
          #current-player {
             display: grid;
-            grid-template-columns: auto 1fr;
+            grid-template-columns: auto auto;
             grid-template-areas:
                "photo label"
                "photo name"
                "photo skip";
             align-items: center;
-            column-gap: 20px;
-            row-gap: 4px;
+            column-gap: 24px;
+            row-gap: 6px;
             background: transparent;
             border: 2px solid rgba(245, 158, 11, 0.3);
             border-radius: 18px;
-            padding: 10px 24px;
-            margin-bottom: 14px;
+            padding: 12px 28px;
+            margin: 0 auto 14px;
             box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
             animation: glowPulse 2s ease-in-out infinite;
             color: #fff;
             font-family: 'Rubik Mono One', sans-serif;
             transition: transform 0.3s ease;
             cursor: grab;
-            width: 100%;
-            max-width: 700px;
+            width: fit-content;
+            max-width: 90%;
          }
 
          #current-player:active { cursor: grabbing; }
@@ -482,7 +482,7 @@
 
          #current-player h2 {
             grid-area: label;
-            font-size: 13px;
+            font-size: 16px;
             letter-spacing: 1px;
             text-transform: uppercase;
             color: var(--accent-1);
@@ -490,8 +490,8 @@
 
          #current-player img {
             grid-area: photo;
-            height: 140px;
-            width: 100px;
+            height: 170px;
+            width: 125px;
             object-fit: cover;
             border-radius: 12px;
             border: 3px solid rgba(245, 158, 11, 0.5);
@@ -788,7 +788,7 @@
                text-align: center;
                padding: 20px;
             }
-            #current-player img, .current-no-photo { height: 110px; width: 80px; }
+            #current-player img, .current-no-photo { height: 130px; width: 100px; }
             #current-player span { font-size: 18px; }
          }
 
@@ -796,7 +796,7 @@
             .main-heading { font-size: 12px; }
             .sub-heading { font-size: 11px; letter-spacing: 1px; }
             .team-table { overflow-x: auto; display: block; }
-            #current-player img, .current-no-photo { height: 90px; width: 65px; }
+            #current-player img, .current-no-photo { height: 105px; width: 80px; }
             #current-player span { font-size: 16px; padding: 5px 12px; }
          }
 
