@@ -322,7 +322,7 @@
 
          .player-stats-badge {
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 400;
             color: var(--accent-3);
             margin-top: 2px;
             line-height: 1.5;
@@ -565,7 +565,7 @@
          .current-stats-badge {
             display: none;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 400;
             letter-spacing: 0.5px;
             line-height: 1.6;
             text-align: center;
@@ -657,24 +657,29 @@
          .team { position: relative; }
 
          .girl-badge {
-            display: none;
+            display: flex;
             align-items: center;
-            gap: 4px;
+            justify-content: center;
             position: absolute;
             top: 14px;
             right: 14px;
-            background: linear-gradient(135deg, #ec4899, #db2777);
-            color: #fff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 5px 10px;
-            border-radius: 20px;
-            letter-spacing: 0.3px;
-            box-shadow: 0 2px 10px rgba(236, 72, 153, 0.4);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.15);
+            color: rgba(148, 163, 184, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            font-size: 14px;
             z-index: 2;
+            transition: all 0.3s ease;
          }
 
-         .girl-badge.active { display: flex; }
+         .girl-badge.active {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 2px 10px rgba(236, 72, 153, 0.4);
+         }
 
          /* Bid Modal */
          .bid-overlay {
@@ -1179,7 +1184,7 @@
 
       <div id="container">
          <div class="team" id="teamAnkit">
-            <div class="girl-badge" id="badgeAnkit" title="Has at least 1 girl player"><i class="fas fa-venus"></i> Girl Power</div>
+            <div class="girl-badge" id="badgeAnkit" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <img src="./UFLPics/Ankit.jpg" alt="Ankit" />
             </div>
@@ -1197,7 +1202,7 @@
          </div>
 
          <div class="team" id="teamDeepak">
-            <div class="girl-badge" id="badgeDeepak" title="Has at least 1 girl player"><i class="fas fa-venus"></i> Girl Power</div>
+            <div class="girl-badge" id="badgeDeepak" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <img src="./UFLPics/Deepak.jpg" alt="Deepak" />
             </div>
@@ -1215,7 +1220,7 @@
          </div>
 
          <div class="team" id="teamHari">
-            <div class="girl-badge" id="badgeHari" title="Has at least 1 girl player"><i class="fas fa-venus"></i> Girl Power</div>
+            <div class="girl-badge" id="badgeHari" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <img src="./UFLPics/Hari.jpg" alt="Hari" />
             </div>
@@ -1233,7 +1238,7 @@
          </div>
 
          <div class="team" id="teamSravan">
-            <div class="girl-badge" id="badgeSravan" title="Has at least 1 girl player"><i class="fas fa-venus"></i> Girl Power</div>
+            <div class="girl-badge" id="badgeSravan" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <img src="./UFLPics/Sravan.jpg" alt="Sravan" />
             </div>
@@ -1251,7 +1256,7 @@
          </div>
 
          <div class="team" id="teamTapan">
-            <div class="girl-badge" id="badgeTapan" title="Has at least 1 girl player"><i class="fas fa-venus"></i> Girl Power</div>
+            <div class="girl-badge" id="badgeTapan" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <img src="./UFLPics/Tapan.JPG" alt="Tapan" />
             </div>
