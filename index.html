@@ -330,11 +330,11 @@
          }
 
          .current-no-photo {
-            height: 380px;
-            width: 250px;
+            grid-area: photo;
+            height: 300px;
+            width: 220px;
             border-radius: 15px;
             border: 3px solid rgba(245, 158, 11, 0.5);
-            margin-bottom: 15px;
             box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
             display: flex;
             align-items: center;
@@ -361,8 +361,10 @@
          }
 
          #auction-panel {
-            min-width: 280px;
-            max-width: 320px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
             position: relative;
             z-index: 1;
          }
@@ -438,13 +440,19 @@
          #clearData { cursor: pointer; }
 
          #current-player {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-areas:
+               "photo label"
+               "photo name"
+               "photo skip";
             align-items: center;
+            column-gap: 36px;
+            row-gap: 10px;
             background: transparent;
             border: 2px solid rgba(245, 158, 11, 0.3);
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 24px;
+            padding: 24px 48px;
             margin-bottom: 30px;
             box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
             animation: glowPulse 2s ease-in-out infinite;
@@ -452,36 +460,45 @@
             font-family: 'Rubik Mono One', sans-serif;
             transition: transform 0.3s ease;
             cursor: grab;
+            width: 100%;
+            max-width: 1100px;
          }
 
          #current-player:active { cursor: grabbing; }
-         #current-player:hover { transform: scale(1.02); }
+         #current-player:hover { transform: scale(1.01); }
 
          #current-player h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
+            grid-area: label;
+            font-size: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             color: var(--accent-1);
          }
 
          #current-player img {
-            height: 340px;
-            width: 230px;
+            grid-area: photo;
+            height: 300px;
+            width: 220px;
             object-fit: cover;
             border-radius: 15px;
             border: 3px solid rgba(245, 158, 11, 0.5);
-            margin-bottom: 15px;
             box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
          }
 
          #current-player span {
-            font-size: 18px;
-            font-style: italic;
+            grid-area: name;
+            display: inline-block;
+            font-size: 42px;
+            font-style: normal;
+            font-weight: 900;
             background: rgba(245, 158, 11, 0.15);
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 10px;
             color: #fff;
             border: 1px solid rgba(245, 158, 11, 0.2);
          }
+
+         .skip-wrap { grid-area: skip; display: flex; gap: 10px; }
 
          @keyframes glowPulse {
             0%   { box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); }
@@ -714,7 +731,6 @@
          @media (max-width: 1400px) {
             #container { flex-wrap: wrap; justify-content: center; }
             .team { flex: 1 1 calc(50% - 20px); min-width: 300px; max-width: 500px; }
-            #auction-panel { min-width: 280px; max-width: 100%; flex: 1 1 100%; }
          }
 
          @media (max-width: 768px) {
@@ -729,12 +745,23 @@
             .team-table th, .team-table td { font-size: 11px; padding: 5px; }
             .player-card { font-size: 15px; }
             .captain-avatar img { width: 80px; height: 80px; }
+            #current-player {
+               grid-template-columns: 1fr;
+               grid-template-areas: "label" "photo" "name" "skip";
+               justify-items: center;
+               text-align: center;
+               padding: 20px;
+            }
+            #current-player img, .current-no-photo { height: 220px; width: 160px; }
+            #current-player span { font-size: 28px; }
          }
 
          @media (max-width: 480px) {
             .main-heading { font-size: 12px; }
             .sub-heading { font-size: 11px; letter-spacing: 1px; }
             .team-table { overflow-x: auto; display: block; }
+            #current-player img, .current-no-photo { height: 180px; width: 130px; }
+            #current-player span { font-size: 22px; padding: 8px 16px; }
          }
 
          /* Player Bid Splash Overlay */
@@ -1021,16 +1048,27 @@
          </button>
       </div>
 
-      <div id="container">
-         <div class="team" id="teamHari">
-            <div class="captain-avatar">
-               <img src="./UFLPics/Hari.jpg" alt="Hari" />
+      <div id="auction-panel">
+         <div id="current-player" draggable="true" ondragstart="dragCurrentPlayer(event)">
+            <h2>Up For Auction</h2>
+            <img id="currentPlayerImg" src="" alt="Current Player Photo" />
+            <span id="currentPlayerName"></span>
+            <div class="skip-wrap">
+               <button id="skipBtn" onclick="skipCurrentPlayer()" style="background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;padding:10px 24px;font-size:15px;font-weight:700;border-radius:10px;cursor:pointer;font-family:'Winky Rough',sans-serif;letter-spacing:0.5px;transition:all 0.15s;">Skip</button>
             </div>
-            <h2 class="team-header">Hari</h2>
+         </div>
+      </div>
+
+      <div id="container">
+         <div class="team" id="teamAnkit">
+            <div class="captain-avatar">
+               <img src="./UFLPics/Ankit.jpg" alt="Ankit" />
+            </div>
+            <h2 class="team-header">Ankit</h2>
             <div class="team-points">
-               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsHari">7000</span></div>
-               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersHari">7</span></div>
-               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidHari">6400</span></div>
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsAnkit">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersAnkit">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidAnkit">6400</span></div>
             </div>
             <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <p>Drag players here</p>
@@ -1038,7 +1076,7 @@
             <h3>Team Roster</h3>
             <table class="team-table">
                <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
-               <tbody id="teamHariRoster"></tbody>
+               <tbody id="teamAnkitRoster"></tbody>
             </table>
          </div>
 
@@ -1062,15 +1100,15 @@
             </table>
          </div>
 
-         <div class="team" id="teamAnkit">
+         <div class="team" id="teamHari">
             <div class="captain-avatar">
-               <img src="./UFLPics/Ankit.jpg" alt="Ankit" />
+               <img src="./UFLPics/Hari.jpg" alt="Hari" />
             </div>
-            <h2 class="team-header">Ankit</h2>
+            <h2 class="team-header">Hari</h2>
             <div class="team-points">
-               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsAnkit">7000</span></div>
-               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersAnkit">7</span></div>
-               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidAnkit">6400</span></div>
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsHari">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersHari">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidHari">6400</span></div>
             </div>
             <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                <p>Drag players here</p>
@@ -1078,27 +1116,7 @@
             <h3>Team Roster</h3>
             <table class="team-table">
                <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
-               <tbody id="teamAnkitRoster"></tbody>
-            </table>
-         </div>
-
-         <div class="team" id="teamTapan">
-            <div class="captain-avatar">
-               <img src="./UFLPics/Tapan.JPG" alt="Tapan" />
-            </div>
-            <h2 class="team-header">Tapan</h2>
-            <div class="team-points">
-               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsTapan">7000</span></div>
-               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersTapan">7</span></div>
-               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidTapan">6400</span></div>
-            </div>
-            <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
-               <p>Drag players here</p>
-            </div>
-            <h3>Team Roster</h3>
-            <table class="team-table">
-               <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
-               <tbody id="teamTapanRoster"></tbody>
+               <tbody id="teamHariRoster"></tbody>
             </table>
          </div>
 
@@ -1122,15 +1140,24 @@
             </table>
          </div>
 
-         <div id="auction-panel">
-            <div id="current-player" draggable="true" ondragstart="dragCurrentPlayer(event)">
-               <h2>Up For Auction</h2>
-               <img id="currentPlayerImg" src="" alt="Current Player Photo" />
-               <span id="currentPlayerName"></span>
-               <div style="display:flex;gap:10px;margin-top:14px;">
-                  <button id="skipBtn" onclick="skipCurrentPlayer()" style="background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;padding:10px 24px;font-size:15px;font-weight:700;border-radius:10px;cursor:pointer;font-family:'Winky Rough',sans-serif;letter-spacing:0.5px;transition:all 0.15s;">Skip</button>
-               </div>
+         <div class="team" id="teamTapan">
+            <div class="captain-avatar">
+               <img src="./UFLPics/Tapan.JPG" alt="Tapan" />
             </div>
+            <h2 class="team-header">Tapan</h2>
+            <div class="team-points">
+               <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsTapan">7000</span></div>
+               <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersTapan">7</span></div>
+               <div class="stat-row"><span class="stat-label">Max Bid</span><span class="stat-value" id="bidTapan">6400</span></div>
+            </div>
+            <div class="team-content" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <p>Drag players here</p>
+            </div>
+            <h3>Team Roster</h3>
+            <table class="team-table">
+               <thead><tr><th>Player</th><th>Points</th><th></th></tr></thead>
+               <tbody id="teamTapanRoster"></tbody>
+            </table>
          </div>
       </div>
 
@@ -1143,19 +1170,19 @@
 
       <script>
          var defaultTeams = {
-             teamHari: { name: 'Hari', points: 7000, players: [] },
-             teamDeepak: { name: 'Deepak', points: 7000, players: [] },
              teamAnkit: { name: 'Ankit', points: 7000, players: [] },
-             teamTapan: { name: 'Tapan', points: 7000, players: [] },
+             teamDeepak: { name: 'Deepak', points: 7000, players: [] },
+             teamHari: { name: 'Hari', points: 7000, players: [] },
              teamSravan: { name: 'Sravan', points: 7000, players: [] },
+             teamTapan: { name: 'Tapan', points: 7000, players: [] },
          };
 
          var teamSounds = {
-             teamHari: null,
-             teamDeepak: null,
              teamAnkit: null,
-             teamTapan: null,
+             teamDeepak: null,
+             teamHari: null,
              teamSravan: null,
+             teamTapan: null,
          };
 
          var audioCtx = null;
