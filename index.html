@@ -314,6 +314,19 @@
             border-color: rgba(245, 158, 11, 0.3);
          }
 
+         .player-name-wrap {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.25;
+         }
+
+         .player-stats-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent-3);
+            margin-top: 2px;
+         }
+
          .player-card.current-bidding {
             background: rgba(245, 158, 11, 0.12);
             border: 2px solid var(--accent-1);
@@ -457,8 +470,8 @@
             grid-template-columns: auto auto;
             grid-template-areas:
                "photo label"
-               "photo name"
-               "photo skip";
+               "photo skip"
+               "photo name";
             align-items: center;
             column-gap: 24px;
             row-gap: 6px;
@@ -486,7 +499,7 @@
 
          #current-player h2 {
             grid-area: label;
-            font-size: 26px;
+            font-size: 18px;
             line-height: 1.5;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -503,10 +516,17 @@
             box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
          }
 
-         #current-player span {
+         .current-player-info {
             grid-area: name;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+         }
+
+         #currentPlayerName {
             display: inline-block;
-            font-size: 22px;
+            font-size: 28px;
             font-style: normal;
             font-weight: 900;
             background: rgba(245, 158, 11, 0.15);
@@ -514,6 +534,18 @@
             border-radius: 8px;
             color: #fff;
             border: 1px solid rgba(245, 158, 11, 0.2);
+         }
+
+         .current-stats-badge {
+            display: none;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--accent-3);
+            background: rgba(16, 185, 129, 0.12);
+            padding: 3px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(16, 185, 129, 0.25);
          }
 
          .skip-wrap { grid-area: skip; display: flex; gap: 10px; }
@@ -788,13 +820,13 @@
             .captain-avatar img { width: 80px; height: 80px; }
             #current-player {
                grid-template-columns: 1fr;
-               grid-template-areas: "label" "photo" "name" "skip";
+               grid-template-areas: "label" "photo" "skip" "name";
                justify-items: center;
                text-align: center;
                padding: 20px;
             }
             #current-player img, .current-no-photo { height: 130px; width: 100px; }
-            #current-player span { font-size: 18px; }
+            #currentPlayerName { font-size: 18px; }
          }
 
          @media (max-width: 480px) {
@@ -802,7 +834,7 @@
             .sub-heading { font-size: 11px; letter-spacing: 1px; }
             .team-table { overflow-x: auto; display: block; }
             #current-player img, .current-no-photo { height: 105px; width: 80px; }
-            #current-player span { font-size: 16px; padding: 5px 12px; }
+            #currentPlayerName { font-size: 16px; padding: 5px 12px; }
          }
 
          /* Player Bid Splash Overlay */
@@ -1093,7 +1125,10 @@
          <div id="current-player" draggable="true" ondragstart="dragCurrentPlayer(event)">
             <h2>Up For<br>Auction</h2>
             <img id="currentPlayerImg" src="" alt="Current Player Photo" />
-            <span id="currentPlayerName"></span>
+            <div class="current-player-info">
+               <span id="currentPlayerName"></span>
+               <span id="currentPlayerStats" class="current-stats-badge"></span>
+            </div>
             <div class="skip-wrap">
                <button id="skipBtn" onclick="skipCurrentPlayer()" style="background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;padding:10px 24px;font-size:15px;font-weight:700;border-radius:10px;cursor:pointer;font-family:'Winky Rough',sans-serif;letter-spacing:0.5px;transition:all 0.15s;">Skip</button>
             </div>
@@ -1356,7 +1391,7 @@
              { id: 'player26', name: 'Daksha', photo: 'Daksha.jpeg' },
              { id: 'player27', name: 'Viral', photo: 'Viral.jpg' },
              { id: 'player28', name: 'Smera', photo: 'Smera.jpg' },
-             { id: 'player29', name: 'Simon', photo: '' },
+             { id: 'player29', name: 'Simon', photo: 'Simon.jpg' },
              { id: 'player30', name: 'Viraj', photo: 'Viraj.jpg' },
              { id: 'player31', name: 'Prajakta', photo: 'Prajakta.jpg' },
              { id: 'player32', name: 'Riddhi', photo: 'Riddhi.JPG' },
@@ -1367,6 +1402,45 @@
 
          function getPlayerById(id) {
              return initialPlayers.find(function(p) { return p.id === id; });
+         }
+
+         var playerStats = {
+             Sravan: { goals: 8, assists: 1 },
+             Apurv: { goals: 8, assists: 1 },
+             Hari: { goals: 1, assists: 7 },
+             Venkatesh: { goals: 3, assists: 5 },
+             Prakshal: { goals: 3, assists: 3 },
+             Mani: { goals: 0, assists: 5 },
+             Saurabh: { goals: 1, assists: 4 },
+             Aneesh: { goals: 4, assists: 1 },
+             Rathin: { goals: 3, assists: 1 },
+             Ravin: { goals: 2, assists: 2 },
+             Mohit: { goals: 4, assists: 0 },
+             Nicole: { goals: 2, assists: 2 },
+             Chan: { goals: 3, assists: 0 },
+             Tanay: { goals: 1, assists: 2 },
+             Tapan: { goals: 2, assists: 1 },
+             Mayuresh: { goals: 1, assists: 2 },
+             Suhas: { goals: 0, assists: 3 },
+             Balaji: { goals: 1, assists: 2 },
+             Prathamesh: { goals: 1, assists: 2 },
+             Mayank: { goals: 2, assists: 0 },
+             Nitin: { goals: 1, assists: 1 },
+             Sanjay: { goals: 2, assists: 0 },
+             Shiva: { goals: 2, assists: 0 },
+             Nihar: { goals: 1, assists: 0 },
+             Vaanya: { goals: 1, assists: 0 },
+             Daksha: { goals: 0, assists: 0 },
+             Prajakta: { goals: 0, assists: 0 },
+             Manali: { goals: 0, assists: 0 },
+             Smera: { goals: 0, assists: 0 },
+             Riddhi: { goals: 0, assists: 0 },
+         };
+
+         function getStatsBadgeHtml(name) {
+             var s = playerStats[name];
+             if (!s || (s.goals === 0 && s.assists === 0)) return '';
+             return '<span class="player-stats-badge">' + s.goals + 'G ' + s.assists + 'A</span>';
          }
 
          var girlNames = ['Nicole', 'Vaanya', 'Daksha', 'Riddhi', 'Prajakta', 'Priyanka', 'Smera'];
@@ -1407,6 +1481,8 @@
              var container = document.getElementById('current-player');
              var img = document.getElementById('currentPlayerImg');
              var nameEl = document.getElementById('currentPlayerName');
+             var statsEl = document.getElementById('currentPlayerStats');
+             var nameWrap = document.querySelector('.current-player-info');
 
              var existingPlaceholder = container.querySelector('.current-no-photo');
              if (existingPlaceholder) existingPlaceholder.remove();
@@ -1419,6 +1495,15 @@
              container.style.display = 'flex';
              nameEl.textContent = player.name;
 
+             var s = playerStats[player.name];
+             if (s && (s.goals > 0 || s.assists > 0)) {
+                 statsEl.textContent = s.goals + 'G  ' + s.assists + 'A';
+                 statsEl.style.display = 'inline-block';
+             } else {
+                 statsEl.textContent = '';
+                 statsEl.style.display = 'none';
+             }
+
              if (player.photo) {
                  img.src = picsBase + '/' + player.photo;
                  img.style.display = 'block';
@@ -1428,7 +1513,7 @@
                  var placeholder = document.createElement('div');
                  placeholder.className = 'current-no-photo';
                  placeholder.textContent = player.name.charAt(0);
-                 container.insertBefore(placeholder, nameEl);
+                 container.insertBefore(placeholder, nameWrap);
              }
          }
 
@@ -1704,7 +1789,8 @@
                  var photoHtml = player.photo
                      ? '<img src="' + picsBase + '/' + player.photo + '" alt="' + player.name + '" class="player-photo" />'
                      : '<div class="player-photo" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,158,11,0.2);color:var(--accent-1);font-weight:700;font-size:14px;">' + player.name.charAt(0) + '</div>';
-                 playerCard.innerHTML = photoHtml + '<span>' + player.name + '</span>';
+                 var statsHtml = getStatsBadgeHtml(player.name);
+                 playerCard.innerHTML = photoHtml + '<div class="player-name-wrap"><span>' + player.name + '</span>' + statsHtml + '</div>';
                  playerCard.ondragstart = drag;
                  playerCard.ondragend = function() { playerCard.classList.remove('dragging'); };
                  playerList.appendChild(playerCard);
