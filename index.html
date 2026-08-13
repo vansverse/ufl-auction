@@ -115,7 +115,7 @@
             flex-wrap: nowrap;
             gap: 20px;
             align-items: flex-start;
-            margin-top: 60px;
+            margin-top: 20px;
             position: relative;
             z-index: 1;
             width: 100%;
@@ -377,7 +377,7 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 8px;
             position: relative;
             z-index: 1;
          }
@@ -462,23 +462,27 @@
             align-items: center;
             column-gap: 24px;
             row-gap: 6px;
-            background: transparent;
-            border: 2px solid rgba(245, 158, 11, 0.3);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(59, 130, 246, 0.06));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(245, 158, 11, 0.35);
             border-radius: 18px;
             padding: 12px 28px;
             margin: 0 auto 14px;
-            box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.06);
             animation: glowPulse 2s ease-in-out infinite;
             color: #fff;
             font-family: 'Rubik Mono One', sans-serif;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: grab;
             width: fit-content;
             max-width: 90%;
          }
 
          #current-player:active { cursor: grabbing; }
-         #current-player:hover { transform: scale(1.01); }
+         #current-player:hover {
+            transform: scale(1.015);
+            box-shadow: 0 0 45px rgba(245, 158, 11, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+         }
 
          #current-player h2 {
             grid-area: label;
@@ -486,6 +490,10 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             color: var(--accent-1);
+         }
+
+         #current-player h2::before {
+            content: '🔨 ';
          }
 
          #current-player img {
