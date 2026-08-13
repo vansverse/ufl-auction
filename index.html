@@ -325,6 +325,32 @@
             font-weight: 700;
             color: var(--accent-3);
             margin-top: 2px;
+            line-height: 1.5;
+         }
+
+         .special-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 4px;
+            margin-right: 4px;
+            width: fit-content;
+         }
+
+         .special-badge.orange-cap-badge {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-1);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+         }
+
+         .special-badge.mvp-badge {
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.4);
          }
 
          .player-card.current-bidding {
@@ -541,11 +567,26 @@
             font-size: 14px;
             font-weight: 700;
             letter-spacing: 0.5px;
+            line-height: 1.6;
+            text-align: center;
             color: var(--accent-3);
             background: rgba(16, 185, 129, 0.12);
-            padding: 3px 12px;
+            padding: 6px 12px;
             border-radius: 6px;
             border: 1px solid rgba(16, 185, 129, 0.25);
+         }
+
+         .current-special-badges {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+         }
+
+         .current-special-badges .special-badge {
+            font-size: 13px;
+            padding: 4px 12px;
+            margin: 0;
          }
 
          .skip-wrap { grid-area: skip; display: flex; gap: 10px; }
@@ -1128,6 +1169,7 @@
             <div class="current-player-info">
                <span id="currentPlayerName"></span>
                <span id="currentPlayerStats" class="current-stats-badge"></span>
+               <div id="currentPlayerBadges" class="current-special-badges"></div>
             </div>
             <div class="skip-wrap">
                <button id="skipBtn" onclick="skipCurrentPlayer()" style="background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;color:#fff;padding:10px 24px;font-size:15px;font-weight:700;border-radius:10px;cursor:pointer;font-family:'Winky Rough',sans-serif;letter-spacing:0.5px;transition:all 0.15s;">Skip</button>
@@ -1437,10 +1479,34 @@
              Riddhi: { goals: 0, assists: 0 },
          };
 
-         function getStatsBadgeHtml(name) {
+         function getStatsLines(name) {
              var s = playerStats[name];
-             if (!s || (s.goals === 0 && s.assists === 0)) return '';
-             return '<span class="player-stats-badge">' + s.goals + 'G ' + s.assists + 'A</span>';
+             if (!s) return [];
+             var lines = [];
+             if (s.goals > 0) lines.push(s.goals + ' Goals');
+             if (s.assists > 0) lines.push(s.assists + ' Assists');
+             return lines;
+         }
+
+         function getStatsBadgeHtml(name) {
+             var lines = getStatsLines(name);
+             if (!lines.length) return '';
+             return '<span class="player-stats-badge">' + lines.join('<br>') + '</span>';
+         }
+
+         var specialBadges = {
+             Apurv: [
+                 { label: 'Orange Cap', className: 'orange-cap-badge' },
+                 { label: 'MVP', className: 'mvp-badge' },
+             ],
+         };
+
+         function getSpecialBadgesHtml(name) {
+             var badges = specialBadges[name];
+             if (!badges || !badges.length) return '';
+             return badges.map(function(b) {
+                 return '<span class="special-badge ' + b.className + '">' + b.label + '</span>';
+             }).join('');
          }
 
          var girlNames = ['Nicole', 'Vaanya', 'Daksha', 'Riddhi', 'Prajakta', 'Priyanka', 'Smera'];
@@ -1482,6 +1548,7 @@
              var img = document.getElementById('currentPlayerImg');
              var nameEl = document.getElementById('currentPlayerName');
              var statsEl = document.getElementById('currentPlayerStats');
+             var badgesEl = document.getElementById('currentPlayerBadges');
              var nameWrap = document.querySelector('.current-player-info');
 
              var existingPlaceholder = container.querySelector('.current-no-photo');
@@ -1495,14 +1562,16 @@
              container.style.display = 'flex';
              nameEl.textContent = player.name;
 
-             var s = playerStats[player.name];
-             if (s && (s.goals > 0 || s.assists > 0)) {
-                 statsEl.textContent = s.goals + 'G  ' + s.assists + 'A';
+             var statLines = getStatsLines(player.name);
+             if (statLines.length) {
+                 statsEl.innerHTML = statLines.join('<br>');
                  statsEl.style.display = 'inline-block';
              } else {
-                 statsEl.textContent = '';
+                 statsEl.innerHTML = '';
                  statsEl.style.display = 'none';
              }
+
+             badgesEl.innerHTML = getSpecialBadgesHtml(player.name);
 
              if (player.photo) {
                  img.src = picsBase + '/' + player.photo;
@@ -1790,7 +1859,8 @@
                      ? '<img src="' + picsBase + '/' + player.photo + '" alt="' + player.name + '" class="player-photo" />'
                      : '<div class="player-photo" style="display:inline-flex;align-items:center;justify-content:center;background:rgba(245,158,11,0.2);color:var(--accent-1);font-weight:700;font-size:14px;">' + player.name.charAt(0) + '</div>';
                  var statsHtml = getStatsBadgeHtml(player.name);
-                 playerCard.innerHTML = photoHtml + '<div class="player-name-wrap"><span>' + player.name + '</span>' + statsHtml + '</div>';
+                 var specialHtml = getSpecialBadgesHtml(player.name);
+                 playerCard.innerHTML = photoHtml + '<div class="player-name-wrap"><span>' + player.name + '</span>' + statsHtml + specialHtml + '</div>';
                  playerCard.ondragstart = drag;
                  playerCard.ondragend = function() { playerCard.classList.remove('dragging'); };
                  playerList.appendChild(playerCard);
