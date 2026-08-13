@@ -157,6 +157,8 @@
             width: 100%;
             display: flex;
             justify-content: center;
+            align-items: center;
+            gap: 10px;
             margin-top: -60px;
             margin-bottom: 12px;
             padding: 14px 0;
@@ -343,6 +345,20 @@
             letter-spacing: 3px;
             margin-top: -8px;
             margin-bottom: 12px;
+         }
+
+         .silver-star {
+            display: inline-block;
+            color: #C7CBD1;
+            text-shadow: 0 0 3px #9AA1AC;
+            font-size: 1.3em;
+            line-height: 1;
+            vertical-align: middle;
+         }
+
+         .captain-avatar .captain-badges {
+            margin: 0;
+            white-space: nowrap;
          }
 
          .special-badge {
@@ -1292,10 +1308,10 @@
          <div class="team" id="teamAnkit">
             <div class="girl-badge" id="badgeAnkit" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <div class="captain-badges"><span class="silver-star">★</span></div>
                <img src="./UFLPics/Ankit.jpg" alt="Ankit" />
             </div>
             <h2 class="team-header">Ankit</h2>
-            <div class="captain-badges">☆</div>
             <div class="team-points">
                <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsAnkit">7000</span></div>
                <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersAnkit">7</span></div>
@@ -1311,10 +1327,10 @@
          <div class="team" id="teamDeepak">
             <div class="girl-badge" id="badgeDeepak" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <div class="captain-badges">⭐🥈🥇</div>
                <img src="./UFLPics/Deepak.jpg" alt="Deepak" />
             </div>
             <h2 class="team-header">Deepak</h2>
-            <div class="captain-badges">⭐🥈🥇</div>
             <div class="team-points">
                <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsDeepak">7000</span></div>
                <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersDeepak">7</span></div>
@@ -1330,10 +1346,10 @@
          <div class="team" id="teamHari">
             <div class="girl-badge" id="badgeHari" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <div class="captain-badges">🥇🥇</div>
                <img src="./UFLPics/Hari.jpg" alt="Hari" />
             </div>
             <h2 class="team-header">Hari</h2>
-            <div class="captain-badges">🥇🥇</div>
             <div class="team-points">
                <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsHari">7000</span></div>
                <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersHari">7</span></div>
@@ -1349,10 +1365,10 @@
          <div class="team" id="teamSravan">
             <div class="girl-badge" id="badgeSravan" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <div class="captain-badges"><span class="silver-star">★</span>⭐</div>
                <img src="./UFLPics/Sravan.jpg" alt="Sravan" />
             </div>
             <h2 class="team-header">Sravan</h2>
-            <div class="captain-badges">☆⭐</div>
             <div class="team-points">
                <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsSravan">7000</span></div>
                <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersSravan">7</span></div>
@@ -1368,10 +1384,10 @@
          <div class="team" id="teamTapan">
             <div class="girl-badge" id="badgeTapan" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+               <div class="captain-badges"><span class="silver-star">★</span><span class="silver-star">★</span><span class="silver-star">★</span></div>
                <img src="./UFLPics/Tapan.JPG" alt="Tapan" />
             </div>
             <h2 class="team-header">Tapan</h2>
-            <div class="captain-badges">☆☆☆</div>
             <div class="team-points">
                <div class="stat-row"><span class="stat-label">Points Balance</span><span class="stat-value" id="pointsTapan">7000</span></div>
                <div class="stat-row"><span class="stat-label">Players Left</span><span class="stat-value" id="playersTapan">7</span></div>
@@ -1598,7 +1614,7 @@
          var GOLD_MEDAL = '\u{1F947}';
          var SILVER_MEDAL = '\u{1F948}';
          var GOLD_STAR = '⭐';
-         var SILVER_STAR = '☆';
+         var SILVER_STAR = '<span class="silver-star">★</span>';
 
          var achievementBadges = {
              Mayank: GOLD_MEDAL + GOLD_STAR,
