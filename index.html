@@ -1494,40 +1494,40 @@
 
          var initialPlayers = [
              { id: 'player1', name: 'Ligin', photo: 'Ligin.jpg' },
-             { id: 'player2', name: 'Apurv', photo: 'Apurv.jpeg' },
-             { id: 'player3', name: 'Aneesh', photo: 'Aneesh.jpg' },
+             { id: 'player2', name: 'Aneesh', photo: 'Aneesh.jpg' },
+             { id: 'player3', name: 'Apurv', photo: 'Apurv.jpeg' },
              { id: 'player4', name: 'Mani', photo: 'Mani.jpg' },
              { id: 'player5', name: 'Suhas', photo: 'Suhas.JPG' },
-             { id: 'player6', name: 'Saurabh', photo: 'Saurabh.jpg' },
-             { id: 'player7', name: 'Akshay', photo: 'Akshay.jpg' },
+             { id: 'player6', name: 'Akshay', photo: 'Akshay.jpg' },
+             { id: 'player7', name: 'Saurabh', photo: 'Saurabh.jpg' },
              { id: 'player8', name: 'Venkatesh', photo: 'Venkatesh.jpg' },
-             { id: 'player9', name: 'Balaji', photo: 'Balaji.jpg' },
-             { id: 'player10', name: 'Mayuresh', photo: 'Mayuresh.jpg' },
-             { id: 'player11', name: 'Krishna', photo: 'Krishna.jpg' },
-             { id: 'player12', name: 'Nicole', photo: 'Nicole.jpg' },
-             { id: 'player13', name: 'Prakshal', photo: 'Prakshal.jpg' },
-             { id: 'player14', name: 'Ravin', photo: 'Ravin.jpg' },
+             { id: 'player9', name: 'Mayuresh', photo: 'Mayuresh.jpg' },
+             { id: 'player10', name: 'Balaji', photo: 'Balaji.jpg' },
+             { id: 'player11', name: 'Prakshal', photo: 'Prakshal.jpg' },
+             { id: 'player12', name: 'Krishna', photo: 'Krishna.jpg' },
+             { id: 'player13', name: 'Nicole', photo: 'Nicole.jpg' },
+             { id: 'player14', name: 'Ajj', photo: 'Ajj.PNG' },
              { id: 'player15', name: 'DJ', photo: 'DJ.jpg' },
-             { id: 'player16', name: 'Ajj', photo: 'Ajj.PNG' },
-             { id: 'player17', name: 'Raghavan', photo: 'Raghavan.jpg' },
+             { id: 'player16', name: 'Raghavan', photo: 'Raghavan.jpg' },
+             { id: 'player17', name: 'Jordan', photo: 'Jordan.jpg' },
              { id: 'player18', name: 'Nitin', photo: 'Nitin.JPG' },
-             { id: 'player19', name: 'Jordan', photo: 'Jordan.jpg' },
-             { id: 'player20', name: 'Mohit', photo: 'Mohit.jpeg' },
-             { id: 'player21', name: 'Varun', photo: 'Varun.jpg' },
-             { id: 'player22', name: 'Shiva', photo: 'Shiva.jpg' },
-             { id: 'player23', name: 'Sanjay', photo: 'Sanjay.jpg' },
-             { id: 'player24', name: 'Vaanya', photo: 'Vaanya.jpeg' },
+             { id: 'player19', name: 'Mohit', photo: 'Mohit.jpeg' },
+             { id: 'player20', name: 'Varun', photo: 'Varun.jpg' },
+             { id: 'player21', name: 'Sanjay', photo: 'Sanjay.jpg' },
+             { id: 'player22', name: 'Vaanya', photo: 'Vaanya.jpeg' },
+             { id: 'player23', name: 'Shiva', photo: 'Shiva.jpg' },
+             { id: 'player24', name: 'Viraj', photo: 'Viraj.jpg' },
              { id: 'player25', name: 'Nihar', photo: 'Nihar.jpg' },
              { id: 'player26', name: 'Daksha', photo: 'Daksha.jpeg' },
              { id: 'player27', name: 'Viral', photo: 'Viral.jpg' },
              { id: 'player28', name: 'Smera', photo: 'Smera.jpg' },
-             { id: 'player29', name: 'Simon', photo: 'Simon.jpg' },
-             { id: 'player30', name: 'Viraj', photo: 'Viraj.jpg' },
-             { id: 'player31', name: 'Prajakta', photo: 'Prajakta.jpg' },
-             { id: 'player32', name: 'Riddhi', photo: 'Riddhi.JPG' },
-             { id: 'player33', name: 'Priyanka', photo: 'Priyanka.jpeg' },
-             { id: 'player34', name: 'Adnan', photo: '' },
-             { id: 'player35', name: 'Manali', photo: '' },
+             { id: 'player29', name: 'Manali', photo: '' },
+             { id: 'player30', name: 'Simon', photo: 'Simon.jpg' },
+             { id: 'player31', name: 'Sai', photo: '' },
+             { id: 'player32', name: 'Prajakta', photo: 'Prajakta.jpg' },
+             { id: 'player33', name: 'Adnan', photo: '' },
+             { id: 'player34', name: 'Riddhi', photo: 'Riddhi.JPG' },
+             { id: 'player35', name: 'Priyanka', photo: 'Priyanka.jpeg' },
          ];
 
          function getPlayerById(id) {
@@ -1683,7 +1683,7 @@
              currentPlayerIndex = parseInt(localStorage.getItem('currentPlayerIndex')) || 0;
              if (!stored) return initialPlayers.slice();
              var ids = JSON.parse(stored);
-             return initialPlayers.filter(function(p) { return ids.indexOf(p.id) !== -1; });
+             return ids.map(function(id) { return getPlayerById(id); }).filter(Boolean);
          }
 
          function getCurrentPlayer() {
@@ -1738,7 +1738,10 @@
 
          function skipCurrentPlayer() {
              if (availablePlayers.length <= 1) return;
-             currentPlayerIndex = (currentPlayerIndex + 1) % availablePlayers.length;
+             var wasLast = currentPlayerIndex === availablePlayers.length - 1;
+             var skipped = availablePlayers.splice(currentPlayerIndex, 1)[0];
+             availablePlayers.push(skipped);
+             if (wasLast) currentPlayerIndex = 0;
              saveAvailableIds();
              updatePlayerList();
          }
@@ -1762,8 +1765,7 @@
          var availablePlayers = loadAvailablePlayers();
 
          function getFixedOrderPlayers() {
-             var availableIds = availablePlayers.map(function(p) { return p.id; });
-             return initialPlayers.filter(function(p) { return availableIds.indexOf(p.id) !== -1; });
+             return availablePlayers.slice();
          }
 
          function allowDrop(ev) { ev.preventDefault(); }
