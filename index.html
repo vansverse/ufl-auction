@@ -1660,9 +1660,10 @@
          // Players who get the "fahh" sound instead of their team's sound.
          var fahhPlayers = ['Apurv', 'Prakshal', 'Vaanya', 'Mani', 'Venkatesh', 'Simon', 'Prajakta'];
 
-         // Tried in order: drop your own clip at ./sounds/fahh.mp3 and it wins over
-         // the bundled fahh.wav. If neither loads we fall back to playSynthFahh().
-         var FAHH_SOURCES = ['./sounds/fahh.mp3', './sounds/fahh.wav'];
+         // The meme clip, with its 0.9s of leading silence trimmed off so it fires
+         // the instant the splash appears. If it can't load we fall back to the
+         // synthesized playSynthFahh() below, so the auction is never silent.
+         var FAHH_SOURCES = ['./sounds/fahh.mp3'];
          var fahhAudio = null;
 
          (function tryFahhSource(i) {
