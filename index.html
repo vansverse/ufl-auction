@@ -531,6 +531,84 @@
             background: linear-gradient(135deg, #ec4899, #db2777);
          }
 
+         .legend-hint { display: none; }
+
+         /* ---- Hero state: legend stands in for the player card until first click ---- */
+         #badge-legend.legend-hero {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 14px 22px;
+            padding: 26px 44px 20px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(59, 130, 246, 0.06));
+            border: 2px solid rgba(245, 158, 11, 0.35);
+            border-radius: 18px;
+            animation: glowPulse 2s ease-in-out infinite;
+         }
+
+         /* Each row's icon and label become grid cells, so labels line up in one column */
+         #badge-legend.legend-hero .legend-item { display: contents; }
+
+         #badge-legend.legend-hero .badge-emoji,
+         #badge-legend.legend-hero .legend-stat,
+         #badge-legend.legend-hero .legend-venus { justify-self: center; }
+
+         #badge-legend.legend-hero .legend-title,
+         #badge-legend.legend-hero .legend-hint {
+            grid-column: 1 / -1;
+            justify-self: center;
+         }
+
+         #badge-legend.legend-hero .legend-title {
+            font-family: 'Rubik Mono One', sans-serif;
+            font-size: 20px;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+         }
+
+         #badge-legend.legend-hero .legend-label { font-size: 19px; }
+         #badge-legend.legend-hero .badge-emoji { font-size: 30px; }
+         #badge-legend.legend-hero .legend-stat { font-size: 15px; padding: 3px 10px; }
+         #badge-legend.legend-hero .legend-venus { width: 30px; height: 30px; font-size: 15px; }
+
+         #badge-legend.legend-hero .legend-hint {
+            display: block;
+            margin-top: 10px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            animation: hintFade 1.6s ease-in-out infinite;
+         }
+
+         @keyframes hintFade {
+            0%, 100% { opacity: 0.45; }
+            50%      { opacity: 1; }
+         }
+
+         /* Shrink-to-strip + reveal of the player card on that first click */
+         #badge-legend.legend-collapsing {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+         }
+
+         #badge-legend.legend-appearing {
+            animation: legendSettle 0.35s ease-out;
+         }
+
+         /* keep the card's own pulse running while it settles in */
+         #current-player.legend-appearing {
+            animation: legendSettle 0.35s ease-out, glowPulse 2s ease-in-out infinite;
+         }
+
+         @keyframes legendSettle {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+         }
+
          #available-section {
             position: relative;
             z-index: 1;
@@ -986,6 +1064,12 @@
             #badge-legend { gap: 6px 12px; padding: 8px 12px; max-width: 100%; }
             .legend-item { font-size: 11px; white-space: normal; }
             .legend-item .badge-emoji { font-size: 15px; }
+            #badge-legend.legend-hero { gap: 10px 14px; padding: 20px 18px 14px; }
+            #badge-legend.legend-hero .legend-title { font-size: 15px; letter-spacing: 2px; }
+            #badge-legend.legend-hero .legend-label { font-size: 14px; }
+            #badge-legend.legend-hero .badge-emoji { font-size: 22px; }
+            #badge-legend.legend-hero .legend-venus { width: 24px; height: 24px; font-size: 12px; }
+            #badge-legend.legend-hero .legend-hint { font-size: 10px; letter-spacing: 1px; }
          }
 
          @media (max-width: 480px) {
@@ -1326,15 +1410,16 @@
       </div>
 
       <div id="auction-panel">
-         <div id="badge-legend">
+         <div id="badge-legend" onclick="collapseLegend()">
             <span class="legend-title">Legend</span>
-            <span class="legend-item"><span class="badge-emoji medal">🥇</span>Captain &mdash; Winner</span>
-            <span class="legend-item"><span class="badge-emoji medal">🥈</span>Captain &mdash; Runner-up</span>
-            <span class="legend-item"><span class="badge-emoji">⭐</span>Winner (Player)</span>
-            <span class="legend-item"><span class="badge-emoji silver-star">⭐</span>Runner-up (Player)</span>
-            <span class="legend-item"><span class="legend-stat">4 Goals</span>Goals scored</span>
-            <span class="legend-item"><span class="legend-stat">2 Assists</span>Assists made</span>
-            <span class="legend-item"><span class="legend-venus"><i class="fas fa-venus"></i></span>Team has a woman player</span>
+            <span class="legend-item"><span class="badge-emoji medal">🥇</span><span class="legend-label">Captain &mdash; Winner</span></span>
+            <span class="legend-item"><span class="badge-emoji medal">🥈</span><span class="legend-label">Captain &mdash; Runner-up</span></span>
+            <span class="legend-item"><span class="badge-emoji">⭐</span><span class="legend-label">Winner (Player)</span></span>
+            <span class="legend-item"><span class="badge-emoji silver-star">⭐</span><span class="legend-label">Runner-up (Player)</span></span>
+            <span class="legend-item"><span class="legend-stat">4 Goals</span><span class="legend-label">Goals scored</span></span>
+            <span class="legend-item"><span class="legend-stat">2 Assists</span><span class="legend-label">Assists made</span></span>
+            <span class="legend-item"><span class="legend-venus"><i class="fas fa-venus"></i></span><span class="legend-label">Team has a woman player</span></span>
+            <span class="legend-hint">Click to start the auction</span>
          </div>
          <div id="current-player" draggable="true" ondragstart="dragCurrentPlayer(event)">
             <h2>Up For<br>Auction</h2>
@@ -1354,7 +1439,7 @@
          <div class="team" id="teamAnkit">
             <div class="girl-badge" id="badgeAnkit" title="Has at least 1 girl player"><i class="fas fa-venus"></i></div>
             <div class="captain-avatar" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
-               <div class="captain-badges"><span class="badge-emoji silver-star">⭐</span></div>
+               <div class="captain-badges"><span class="badge-emoji silver-star">⭐</span><span class="badge-emoji silver-star">⭐</span></div>
                <img src="./UFLPics/Ankit.jpg" alt="Ankit" />
             </div>
             <h2 class="team-header">Ankit</h2>
@@ -1668,7 +1753,7 @@
              Hari: GOLD_MEDAL + GOLD_MEDAL,
              Mani: SILVER_MEDAL + SILVER_MEDAL,
              Deepak: GOLD_STAR + SILVER_MEDAL + GOLD_MEDAL,
-             Ankit: SILVER_STAR,
+             Ankit: SILVER_STAR + SILVER_STAR,
              Sravan: SILVER_STAR + GOLD_STAR,
              Tapan: SILVER_STAR + SILVER_STAR + SILVER_STAR,
              Aniket: GOLD_STAR,
@@ -1799,7 +1884,7 @@
                  return;
              }
 
-             container.style.display = 'grid';
+             container.style.display = legendHeroActive ? 'none' : 'grid';
              nameEl.textContent = player.name;
 
              var statLines = getStatsLines(player.name);
@@ -1824,6 +1909,39 @@
                  placeholder.textContent = player.name.charAt(0);
                  container.insertBefore(placeholder, nameWrap);
              }
+         }
+
+         /* The legend opens big, standing in for the first player's card. One click
+            shrinks it to the strip above the card and reveals the player. */
+         var LEGEND_SEEN_KEY = 'legendSeen';
+         var legendHeroActive = false;
+
+         function initLegend() {
+             if (localStorage.getItem(LEGEND_SEEN_KEY)) return;
+             legendHeroActive = true;
+             document.getElementById('badge-legend').classList.add('legend-hero');
+             document.getElementById('current-player').style.display = 'none';
+         }
+
+         function collapseLegend() {
+             if (!legendHeroActive) return;
+             var legend = document.getElementById('badge-legend');
+             var card = document.getElementById('current-player');
+
+             legend.classList.add('legend-collapsing');
+             setTimeout(function() {
+                 legendHeroActive = false;
+                 localStorage.setItem(LEGEND_SEEN_KEY, '1');
+                 legend.classList.remove('legend-hero');
+                 legend.classList.remove('legend-collapsing');
+                 legend.classList.add('legend-appearing');
+                 card.classList.add('legend-appearing');
+                 updateCurrentPlayerDisplay();
+                 setTimeout(function() {
+                     legend.classList.remove('legend-appearing');
+                     card.classList.remove('legend-appearing');
+                 }, 400);
+             }, 250);
          }
 
          function skipCurrentPlayer() {
@@ -2233,6 +2351,7 @@
              updatePlayerList();
              loadTeams();
              checkAuctionComplete();
+             initLegend();
          };
 
          function toggleFullscreen() {
