@@ -1657,7 +1657,93 @@
              });
          }
 
-         function playSoldSound(teamId) {
+         // Players who get the "fahh" sound instead of their team's sound.
+         var fahhPlayers = ['Apurv', 'Prakshal', 'Vaanya', 'Mani', 'Venkatesh', 'Simon', 'Prajakta'];
+
+         // Tried in order: drop your own clip at ./sounds/fahh.mp3 and it wins over
+         // the bundled fahh.wav. If neither loads we fall back to playSynthFahh().
+         var FAHH_SOURCES = ['./sounds/fahh.mp3', './sounds/fahh.wav'];
+         var fahhAudio = null;
+
+         (function tryFahhSource(i) {
+             if (i >= FAHH_SOURCES.length) return;
+             var candidate = new Audio();
+             candidate.preload = 'auto';
+             candidate.addEventListener('canplaythrough', function() {
+                 if (!fahhAudio) fahhAudio = candidate;
+             });
+             candidate.addEventListener('error', function() { tryFahhSource(i + 1); });
+             candidate.src = FAHH_SOURCES[i];
+         })(0);
+
+         function playSynthFahh() {
+             var ctx = getAudioCtx();
+             var t = ctx.currentTime;
+             var dur = 0.55;
+
+             // "f" fricative: short filtered noise burst.
+             var noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.09), ctx.sampleRate);
+             var noiseData = noiseBuf.getChannelData(0);
+             for (var i = 0; i < noiseData.length; i++) noiseData[i] = Math.random() * 2 - 1;
+             var noise = ctx.createBufferSource();
+             noise.buffer = noiseBuf;
+             var noiseHp = ctx.createBiquadFilter();
+             noiseHp.type = 'highpass';
+             noiseHp.frequency.value = 3000;
+             var noiseGain = ctx.createGain();
+             noiseGain.gain.setValueAtTime(0.12, t);
+             noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+             noise.connect(noiseHp);
+             noiseHp.connect(noiseGain);
+             noiseGain.connect(ctx.destination);
+             noise.start(t);
+
+             // "ahh" vowel: sawtooth glottal source through formant bandpasses.
+             var osc = ctx.createOscillator();
+             osc.type = 'sawtooth';
+             osc.frequency.setValueAtTime(215, t + 0.04);
+             osc.frequency.linearRampToValueAtTime(240, t + 0.14);
+             osc.frequency.linearRampToValueAtTime(155, t + dur);
+
+             var vowelGain = ctx.createGain();
+             vowelGain.gain.setValueAtTime(0.0001, t + 0.04);
+             vowelGain.gain.linearRampToValueAtTime(0.35, t + 0.11);
+             vowelGain.gain.setValueAtTime(0.35, t + 0.32);
+             vowelGain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+             vowelGain.connect(ctx.destination);
+
+             var formants = [[730, 8, 1.0], [1150, 10, 0.7], [2600, 12, 0.25]];
+             formants.forEach(function(f) {
+                 var bp = ctx.createBiquadFilter();
+                 bp.type = 'bandpass';
+                 bp.frequency.value = f[0];
+                 bp.Q.value = f[1];
+                 var fg = ctx.createGain();
+                 fg.gain.value = f[2];
+                 osc.connect(bp);
+                 bp.connect(fg);
+                 fg.connect(vowelGain);
+             });
+
+             osc.start(t + 0.04);
+             osc.stop(t + dur);
+         }
+
+         function playFahh() {
+             if (fahhAudio) {
+                 fahhAudio.currentTime = 0;
+                 var p = fahhAudio.play();
+                 if (p && p.catch) p.catch(function() { playSynthFahh(); });
+                 return;
+             }
+             playSynthFahh();
+         }
+
+         function playSoldSound(teamId, playerName) {
+             if (playerName && fahhPlayers.indexOf(playerName) !== -1) {
+                 playFahh();
+                 return;
+             }
              if (teamId === 'teamHari') playTrumpet();
              else if (teamId === 'teamDeepak') playDrumRoll();
              else if (teamId === 'teamAnkit') playFanfare();
@@ -2165,7 +2251,7 @@
              void windGust.offsetWidth;
              windGust.classList.add('gusting');
 
-             playSoldSound(teamId);
+             playSoldSound(teamId, playerName);
          }
 
          function dismissSplash() {
